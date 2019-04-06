@@ -6,19 +6,17 @@
  * CASTEL Brandon
  * 06-04-19
  */
+var address, username, password;
 
 class MQTT {
   /**
    * Constructeur de la classe
    */
   constructor() {
-    this.address;
-    this.username;
-    this.password;
     this.flag = true;
     this.reconnectTimeOut = 2000;
   }
-  
+
   buttonConnectTrigger() {
     if (flag == true) {
   		address  = document.getElementById("IP").value;
@@ -55,7 +53,7 @@ class MQTT {
   MQTTConnect(host, user, passwd) {
     //On réinitialise le button et redémarre la connexion
     buttonConnectRefresh();
-    buttonConnectStyle("Connexion...", "#FFA500")
+    buttonConnectStyle("Connexion...", "#FFA500");
 
     console.log("connecting to " + host + " :9001");
     client = new Paho.MQTT.Client(host, 9001, "01");

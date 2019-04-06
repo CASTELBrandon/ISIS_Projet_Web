@@ -2,9 +2,11 @@
   Ce code source permet de gérer les animations et la gestion
   de la page web.
 
-  Version 0.0.0.1 
   CASTEL Brandon
+  06-04-19
 */
+
+var mqtt = new MQTT();
 
 /******************************************
         Les paramètres par défaut
@@ -102,7 +104,7 @@ function colorValueChangePourcent(id, value) {
       default :
         document.getElementById("blueValue").innerHTML = value + "%";
         $("#blue").slider("value", binaryLevelConversion(value));
-    } 
+    }
 }
 
 function colorValueChangeBinary(id, value) {
@@ -118,7 +120,7 @@ function colorValueChangeBinary(id, value) {
       default :
         document.getElementById("blueValue").innerHTML = pourcentConversion(value);
         $("#blue").slider("value", value);
-    } 
+    }
 }
 
 /*
@@ -143,7 +145,7 @@ function colorValueTrigger() {
         break;
       default :
         sendMessage("01.Clr.B:" + binaryLevelConversion(nColorValue), "test");
-    }   
+    }
   }
 
   console.log("The color value of " + this.id + " has been changed for : " + nColorValue.toString());
@@ -155,7 +157,7 @@ function colorValueTrigger() {
 */
 function colorPickerDisplay () {
   var _colorSpace  = document.getElementById("colorSpace").style.width,//On se sert de la méthode "parseInt" pour transformer la valeur en base 10.
-      _colorPicker = $("#colorPicker");  
+      _colorPicker = $("#colorPicker");
 
   if(_colorPicker.css("display") == "none") {
     anime({
@@ -163,8 +165,8 @@ function colorPickerDisplay () {
       width: '470px',
       duration: 500,
       easing: 'easeInOutExpo'
-    }); 
-    _colorPicker.show(1000); 
+    });
+    _colorPicker.show(1000);
   }
   else {
     _colorPicker.hide(500);
@@ -179,7 +181,7 @@ function colorPickerDisplay () {
 
 /****************Fonctions du bouton de connexion****************/
 function buttonConnectStyle(message, color) {
-  buttonConnect.innerHTML = message; 
+  buttonConnect.innerHTML = message;
   anime.timeline({
     duration: 300,
     easing: 'easeInOutQuad'
@@ -189,7 +191,7 @@ function buttonConnectStyle(message, color) {
 }
 
 function buttonConnectRefresh() {
-  buttonConnect.innerHTML = "Se connecter"; 
+  buttonConnect.innerHTML = "Se connecter";
   anime.timeline({
     duration: 300,
     easing: 'easeInOutQuad'
@@ -227,11 +229,11 @@ function buttonArrowOpen() {
 
 
 
-    
+
 
 /******************************************
             Les évènements
-******************************************/  
+******************************************/
 /***************Évènement sur support tactile*****************/
   //>>Évènement des curseurs de couleur
 
@@ -260,7 +262,7 @@ function buttonArrowOpen() {
   });
 
   /*
-    On récupère la valeur du color picker grâce à un callback de farbtastic. 
+    On récupère la valeur du color picker grâce à un callback de farbtastic.
     On change ensuite l'afficheur par la couleur sélectionnée.
   */
   $("#colorPicker").farbtastic(function(color) {
@@ -305,8 +307,8 @@ function buttonArrowOpen() {
   document.getElementById("swatch").addEventListener('click', colorPickerDisplay);
 
   //Evènement des boutons de connexion
-  document.getElementById("buttonConnect").addEventListener("click", buttonConnectTrigger);
-  document.getElementById("buttonConnect").addEventListener("touch", buttonConnectTrigger);
+  document.getElementById("buttonConnect").addEventListener("click", mqtt.buttonConnectTrigger);
+  document.getElementById("buttonConnect").addEventListener("touch", mqtt.buttonConnectTrigger);
   document.getElementById("buttonArrow").addEventListener("click", buttonArrowOpen);//Voir fichier js de la page
   document.getElementById("buttonArrow").addEventListener("touch", buttonArrowOpen);
 
