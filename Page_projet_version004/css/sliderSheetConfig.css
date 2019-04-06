@@ -1,0 +1,109 @@
+/***********************/
+/*Propriétés de la page*/
+/***********************/
+.ui-widget-content {
+  background-color: #282923;
+}
+#title {
+  font-size: 50px;
+  text-align: center;
+  text-shadow: 0 0 10px #00FFFF;
+  font-family: "Brush Script MT", "Brush Script Std", cursive;
+  color: #00FFFF;  
+}
+
+/*************************************/
+/*Propriété des éléments de connexion*/
+/*************************************/
+.inputConnect {
+  background-color: #282923;
+  color: #bfbfbf;
+  border-radius: 12px;
+  border-color: #585858;
+  width: 120px;
+  text-align: center;
+}
+
+#buttonConnect {
+  background-color: #282923;
+  color: #bfbfbf;
+  border-radius: 12px;
+  border-color: #585858;
+}
+
+#buttonArrow {
+  background-color: #00FFFF;
+  border-style: none;
+  font-size: 17px;
+  color: White;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+}
+#buttonArrow:hover {
+   box-shadow: 0px 0px 3px 1px #0ff;/*Effet néon*/
+}
+
+/*******************************************/
+/*Propriété de la partie gestion de couleur*/
+/*******************************************/
+#colorSpace {
+  border: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  border-color: #00FFFF;/*Cyan*/
+  width: 270px;
+  height: 160px;
+  box-shadow: 0px 0px 3px 1px #0ff;/*Effet néon*/
+}
+
+/*Gestion des sliders*/
+#redZone, #greenZone, #blueZone {
+  float: left;
+  width: 10px;
+  margin: 16px;
+}
+#redValue, #greenValue, #blueValue {
+ color: white;
+ text-align: center;
+ width: 37px;
+
+ border: 1px;
+ border-style: solid;
+ border-radius: 5px;
+ border-color: #00FFFF;/*Cyan*/
+ 
+}
+#red, #green, #blue {
+  float: left;
+  width: 10px;
+  margin: 13px;
+  margin-top: 15px;
+  position: center;
+}
+#red .ui-slider-range { background: #ef2929; }
+#red .ui-slider-handle { border-color: #00FFFF; }
+#green .ui-slider-range { background: #8ae234; }
+#green .ui-slider-handle { border-color: #00FFFF; }
+#blue .ui-slider-range { background: #729fcf; }
+#blue .ui-slider-handle { border-color: #00FFFF; }
+
+/*ColorPicker*/
+#colorPicker {
+  transform-origin: 0 0;
+  transform: scale(0.7,0.7);
+  float: left;
+  margin-top: 12px;
+}
+
+/*Afficheur de couleur*/
+#swatch {
+  float: left;
+  width: 100px;
+  height: 100px;
+  background-image: none;
+  border-radius: 50%;
+  border-color: #00FFFF;
+  margin: 20px;
+  margin-top: 30px;
+}
