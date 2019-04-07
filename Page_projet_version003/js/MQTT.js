@@ -3,7 +3,7 @@
 	avec le serveur. Il gère le système de connexion
 	avec le broker MQTT.
 
-	Version 0.0.0.1
+	07-04-19
 	CASTEL Brandon
 */
 
