@@ -1,8 +1,8 @@
 /*
 	Bibliothèque de gestion de la communication MQTT
 	avec le serveur. Il gère le système de connexion
-	avec le broker MQTT. 
-	
+	avec le broker MQTT.
+
 	Version 0.0.0.1
 	CASTEL Brandon
 */
@@ -15,7 +15,7 @@ class MQTTClient {
 		this.reconnectTimeOut = 2000;
 		this.client = new Paho.MQTT.Client(host, port, idClient);
 	}
-	
+
 
 	/******************************************
 					Fonctions
@@ -63,13 +63,13 @@ class MQTTClient {
 	onConnectionLost(message) {
 	  	//setTimeout(MQTTconnect, reconnectTimeout);
 	  	console.log("connection lost: " + message.errorMessage);
-	  	buttonConnectRefresh();  	
+	  	buttonConnectRefresh();
 	}
 
 	onMessageArrived(message) {
 		let mesReceiv = message.payloadString;
 		let infoMes = "New message received (topic " + message.destinationName + ") : " + mesReceiv;
-		console.log(infoMes); 
+		console.log(infoMes);
 	}
 
 	sendMessage(message, topic) {
@@ -79,4 +79,3 @@ class MQTTClient {
 	}
 
 };
-

@@ -1,8 +1,8 @@
 /*
 	Bibliothèque de gestion de la communication MQTT
 	avec le serveur. Il gère le système de connexion
-	avec le broker MQTT. 
-	
+	avec le broker MQTT.
+
 	Version 0.0.0.1
 	CASTEL Brandon
 */
@@ -40,14 +40,14 @@ function buttonConnectTrigger() {
 		} else {
 			MQTTConnect(address, username, password);
 		}
-				
+
 	} else if (flag == false) {
 		flag = true;
 
 		//On se déconnecte du serveur
 		console.log("Client is disconnected.");
 		client.disconnect();
-	}		
+	}
 }
 
 function MQTTConnect(host, user, passwd) {
@@ -96,14 +96,14 @@ function onFailure(message) {
 function onConnectionLost(message) {
   	//setTimeout(MQTTconnect, reconnectTimeout);
   	console.log("connection lost: " + message.errorMessage + ".");
-  	buttonConnectRefresh();  	
+  	buttonConnectRefresh();
 }
 
 function onMessageArrived(message) {
 	var mesReceiv = message.payloadString,
 		value = mesReceiv.substr(9),
 		id = mesReceiv.slice(0,8);
-	console.log(mesReceiv); 
+	console.log(mesReceiv);
 
 	switch (id) {
 		case "00.Clr.R":
@@ -123,5 +123,3 @@ function sendMessage(message, topic) {
   	mes.destinationName = topic;
   	client.send(mes);
 }
-
-

@@ -6,8 +6,6 @@
   06-04-19
 */
 
-var mqtt = new MQTT();
-
 /******************************************
         Les paramètres par défaut
 ******************************************/
@@ -26,7 +24,7 @@ var _redValue   = $( "#red" ),
     _greenValue = $( "#green" ),
     _blueValue  = $( "#blue" );
 
-
+var mqtt = new MQTTjs("","","");
 
 
 
@@ -190,6 +188,10 @@ function buttonConnectStyle(message, color) {
   buttonConnect.style.transition = "box-shadow 0.3s ease-in-out";
 }
 
+function getbuttonConnectTrigger() {
+  mqtt.buttonConnectTrigger();
+}
+
 function buttonConnectRefresh() {
   buttonConnect.innerHTML = "Se connecter";
   anime.timeline({
@@ -307,11 +309,10 @@ function buttonArrowOpen() {
   document.getElementById("swatch").addEventListener('click', colorPickerDisplay);
 
   //Evènement des boutons de connexion
-  document.getElementById("buttonConnect").addEventListener("click", mqtt.buttonConnectTrigger);
-  document.getElementById("buttonConnect").addEventListener("touch", mqtt.buttonConnectTrigger);
+  document.getElementById("buttonConnect").addEventListener("click", getbuttonConnectTrigger);
+  document.getElementById("buttonConnect").addEventListener("touch", getbuttonConnectTrigger);
   document.getElementById("buttonArrow").addEventListener("click", buttonArrowOpen);//Voir fichier js de la page
   document.getElementById("buttonArrow").addEventListener("touch", buttonArrowOpen);
-
 
 
 

@@ -6,47 +6,52 @@
  * CASTEL Brandon
  * 06-04-19
  */
-var address, username, password;
 
-class MQTT {
+class MQTTjs {
   /**
    * Constructeur de la classe
    */
-  constructor() {
+  constructor(host, user, pswd) {
+    this.address = host;
+    this.usernam = user;
+    this.password = pswd;
     this.flag = true;
     this.reconnectTimeOut = 2000;
+    this.client;
   }
 
   buttonConnectTrigger() {
-    if (flag == true) {
-  		address  = document.getElementById("IP").value;
-  		username = document.getElementById("username").value;
-  		password = document.getElementById("password").value;
+    if (this.flag == true) {
+  		this.address  = document.getElementById("IP").value;
+  		this.username = document.getElementById("username").value;
+  		this.password = document.getElementById("password").value;
+
+      console.log(this.address);
   		//port = prompt("Port");
 
   		//Si l'adresse est nulle ou la demande annulé, on remet par défaut
-  		if (address == null || address == "") {
+  		if (this.address == null || this.address == "") {
   			console.log("Any address was specified");
   			alert("Veuillez spécifier une addresse IP.");
   			buttonConnectRefresh();
-  		} else if (username == null || username == "") {
+  		} else if (this.username == null || this.username == "") {
   			console.log("Any username was specified");
   			alert("Veuillez spécifier un nom d'utilisateur.");
   			buttonConnectRefresh();
-  		} else if (password == null || password == "") {
+  		} else if (this.password == null || this.password == "") {
   			console.log("Any password was specified");
   			alert("Veuillez spécifier un mot de passe.");
   			buttonConnectRefresh();
   		} else {
-  			MQTTConnect(address, username, password);
+  			this.MQTTConnect(this.address, this.username, this.password);
   		}
 
-  	} else if (flag == false) {
-  		flag = true;
+  	} else if (this.flag == false) {
+  		this.flag = true;
 
   		//On se déconnecte du serveur
   		console.log("Client is disconnected.");
-  		client.disconnect();
+  		this.client.disconnect();
   	}
   }
 
@@ -56,19 +61,21 @@ class MQTT {
     buttonConnectStyle("Connexion...", "#FFA500");
 
     console.log("connecting to " + host + " :9001");
-    client = new Paho.MQTT.Client(host, 9001, "01");
+    this.client = new Paho.MQTT.Client(host, 9001, "01");
     var options = {
       //useSSL: true,
       userName: user,
       password: passwd,
-      onSuccess: onConnect,
-      onFailure: onFailure //Si il y a échec de connexion
+      onSuccess: this.onConnect,
+      onFailure: this.onFailure //Si il y a échec de connexion
     }
 
-    client.onConnectionLost = onConnectionLost; //Si on perd la connexion
-    client.onMessageArrived = onMessageArrived; //Appelle la fonction associée à la réception d'un message
+    this.client.onConnectionLost = this.onConnectionLost; //Si on perd la connexion
+    this.client.onMessageArrived = this.onMessageArrived; //Appelle la fonction associée à la réception d'un message
 
-    client.connect(options);
+    this.client.connect(options);
+
+    console.log(this.client);
   }
 
   onConnect() {
@@ -79,9 +86,11 @@ class MQTT {
   	console.log("Connected");
   	var message = new Paho.MQTT.Message("New Test 2");
   	message.destinationName = "test";
-  	client.subscribe("#");
-  	client.send(message);
-  	flag = false;
+
+    console.log(this.client);
+  	this.client.subscribe("#");
+  	this.client.send(message);
+  	this.flag = false;
   }
 
   onFailure(message) {
@@ -93,13 +102,13 @@ class MQTT {
   	//setTimeout(MQTTConnect, reconnectTimeOut);
   }
 
-  onConnectionLost() {
+  onConnectionLost(message) {
     //setTimeout(MQTTconnect, reconnectTimeout);
   	console.log("connection lost: " + message.errorMessage + ".");
   	buttonConnectRefresh();
   }
 
-  onMessageArrived() {
+  onMessageArrived(message) {
     var mesReceiv = message.payloadString,
   		value = mesReceiv.substr(9),
   		id = mesReceiv.slice(0,8);
@@ -118,9 +127,9 @@ class MQTT {
   	}
   }
 
-  sendMessage() {
+  sendMessage(message, topic) {
     var mes = new Paho.MQTT.Message(message);
     	mes.destinationName = topic;
-    	client.send(mes);
+    	this.client.send(mes);
   }
 }
