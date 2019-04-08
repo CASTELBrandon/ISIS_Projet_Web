@@ -4,6 +4,9 @@
 .ui-widget-content {
   background-color: #282923;
 }
+p {
+  font-size: 12px;
+}
 #title {
   font-size: 50px;
   text-align: center;
@@ -11,6 +14,7 @@
   font-family: "Brush Script MT", "Brush Script Std", cursive;
   color: #00FFFF;
 }
+
 
 /*************************************/
 /*Propriété des éléments de connexion*/
@@ -71,6 +75,7 @@
 #redValue, #greenValue, #blueValue, #satValue {
  color: white;
  text-align: center;
+ font-size: 13px;
  width: 37px;
 
  border: 1px;

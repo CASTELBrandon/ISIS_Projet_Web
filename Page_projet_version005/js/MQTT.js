@@ -81,6 +81,7 @@ function onConnect() {
 	message.destinationName = "test";
 	client.subscribe("#");
 	client.send(message);
+	//permission(true); //On affiche les fonctions si on est connecté
 	flag = false;
 }
 
@@ -97,6 +98,7 @@ function onConnectionLost(message) {
   	//setTimeout(MQTTconnect, reconnectTimeout);
   	console.log("connection lost: " + message.errorMessage + ".");
   	buttonConnectRefresh();
+		//permission(false);//Si on perd la connexion on désactive l'accès aux fonctions
 }
 
 function onMessageArrived(message) {

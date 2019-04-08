@@ -100,9 +100,12 @@ function colorValueChangePourcent(id, value) {
         document.getElementById("greenValue").innerHTML = value + "%";
         $("#green").slider("value", binaryLevelConversion(value));
         break;
-      default :
+      case "valueValue":
         document.getElementById("blueValue").innerHTML = value + "%";
         $("#blue").slider("value", binaryLevelConversion(value));
+      case "satValue" :
+        document.getElementById("satValue").innerHTML = value + "%";
+        $("#sat").slider("value", binaryLevelConversion(value));
     }
 }
 
@@ -116,7 +119,7 @@ function colorValueChangeBinary(id, value) {
         document.getElementById("greenValue").innerHTML = pourcentConversion(value);
         $("#green").slider("value", value);
         break;
-      default :
+      case "blueValue" :
         document.getElementById("blueValue").innerHTML = pourcentConversion(value);
         $("#blue").slider("value", value);
     }
@@ -161,7 +164,7 @@ function colorPickerDisplay () {
   if(_colorPicker.css("display") == "none") {
     anime({
       targets: '#colorSpace',
-      width: '470px',
+      width: '530px',
       duration: 500,
       easing: 'easeInOutExpo'
     });
@@ -171,7 +174,7 @@ function colorPickerDisplay () {
     _colorPicker.hide(500);
     anime({
       targets: '#colorSpace',
-      width: '270px',
+      width: '330px',
       duration: 1000,
       easing: 'easeInOutExpo'
     });
@@ -223,16 +226,35 @@ function buttonArrowOpen() {
   }
 }
 
+/**
+ * Cette fonction affiche ou non les fonctions de la page si on est connecté ou
+ * déconnecté. Cela a pour but de ne pas donner l'accès à l'utilisateur si les
+ * conditions ci-dessous ne sont pas remplies.
+ */
+/*function permission (access) {
+  if (access == true)
+    $("#colorSpace").show(1000);
+  else if (access == false)
+    $("#colorSpace").hide(1000);
+}*/
 
 
 
 
 
 
-if (buttonConnect == "Connecté") {
+
+
 /******************************************
             Les évènements
 ******************************************/
+/**
+ * Cette fonction est appellée une fois que l'utilisateur est connecté.
+ * Elle active toutes les manipulations possible sur la page, hormis
+ * la connexion.
+ */
+
+
 /***************Évènement sur support tactile*****************/
   //>>Évènement des curseurs de couleur
 
@@ -242,6 +264,17 @@ if (buttonConnect == "Connecté") {
   document.getElementById("redValue").addEventListener('click', colorValueTrigger);
   document.getElementById("greenValue").addEventListener('click', colorValueTrigger);
   document.getElementById("blueValue").addEventListener('click', colorValueTrigger);
+  document.getElementById("satValue").addEventListener('click', colorValueTrigger);
+
+  /*
+    On initialise les afficheurs à leurs valeurs par défaut en pourcentage (%).
+    Pour cela on appelle la fonction "pourcentConversion" créée plus haut.
+  */
+  document.getElementById("redValue").innerHTML   = pourcentConversion(_redValue.slider( "value" ));
+  document.getElementById("greenValue").innerHTML = pourcentConversion(_greenValue.slider( "value" ));
+  document.getElementById("blueValue").innerHTML  = pourcentConversion(_blueValue.slider( "value" ));
+  document.getElementById("satValue").innerHTML  = pourcentConversion(_satValue.slider( "value" ));
+
 
   /*
     On modifie la valeur des afficheurs R, V, B à chaque modification du slider
@@ -260,9 +293,9 @@ if (buttonConnect == "Connecté") {
     sendMessage("01.Clr.B:" + ui.value.toString(), "test");
   });
   $("#sat").on("slide", function(event, ui){
-    document.getElementById("satValue").innerHTML = pourcentConversion(ui.value);
-    sendMessage("01.Clr.S:" + ui.value.toString(), "test");
+    document.getElementById("satValue").innerHTML  = pourcentConversion(ui.value);
   });
+!
 
   /*
     On récupère la valeur du color picker grâce à un callback de farbtastic.
@@ -309,13 +342,17 @@ if (buttonConnect == "Connecté") {
   //>>Évènement du "swatch"
   document.getElementById("swatch").addEventListener('click', colorPickerDisplay);
 
+  //On amorce le color picker
+  $(document).ready(function() {
+      $('#colorPicker').farbtastic('#color');
+  });
+
   //>>Evènement des boutons de connexion
   document.getElementById("buttonConnect").addEventListener("click", buttonConnectTrigger);
   document.getElementById("buttonConnect").addEventListener("touch", buttonConnectTrigger);
   document.getElementById("buttonArrow").addEventListener("click", buttonArrowOpen);//Voir fichier js de la page
   document.getElementById("buttonArrow").addEventListener("touch", buttonArrowOpen);
 
-  //>>Autorisation d'intervenir sur la page
 
 
 
@@ -347,22 +384,11 @@ $( "#sat").slider("value", 0);
 //On initialise le visionneur
 refreshSwatch();
 
-//On amorce le color picker
-$(document).ready(function() {
-    $('#colorPicker').farbtastic('#color');
-});
 
-//On cache le color picker et les input d'identification
+/**
+ * On cache le color picker, les input d'identification et les fonctions jusqu'à
+ * connexion.
+ */
 $("#colorPicker").hide();
 $(".inputConnect").hide();
-
-/*
-  On initialise les afficheurs à leurs valeurs par défaut en pourcentage (%).
-  Pour cela on appelle la fonction "pourcentConversion" créée plus haut.
-*/
-document.getElementById("redValue").innerHTML   = pourcentConversion(_redValue.slider( "value" ));
-document.getElementById("greenValue").innerHTML = pourcentConversion(_greenValue.slider( "value" ));
-document.getElementById("blueValue").innerHTML  = pourcentConversion(_blueValue.slider( "value" ));
-document.getElementById("satValue").innerHTML  = pourcentConversion(_satValue.slider( "value" ));
-
-}
+//$("#colorSpace").hide();
