@@ -2,7 +2,7 @@
   Ce code source permet de gérer les animations et la gestion
   de la page web.
 
-  Version 0.0.0.1 
+  08-04-19
   CASTEL Brandon
 */
 
@@ -22,7 +22,8 @@ var flag_buttonArrow=false;
 
 var _redValue   = $( "#red" ),
     _greenValue = $( "#green" ),
-    _blueValue  = $( "#blue" );
+    _blueValue  = $( "#blue" ),
+    _satValue   = $( "#sat");
 
 
 
@@ -102,7 +103,7 @@ function colorValueChangePourcent(id, value) {
       default :
         document.getElementById("blueValue").innerHTML = value + "%";
         $("#blue").slider("value", binaryLevelConversion(value));
-    } 
+    }
 }
 
 function colorValueChangeBinary(id, value) {
@@ -118,7 +119,7 @@ function colorValueChangeBinary(id, value) {
       default :
         document.getElementById("blueValue").innerHTML = pourcentConversion(value);
         $("#blue").slider("value", value);
-    } 
+    }
 }
 
 /*
@@ -143,7 +144,7 @@ function colorValueTrigger() {
         break;
       default :
         sendMessage("01.Clr.B:" + binaryLevelConversion(nColorValue), "test");
-    }   
+    }
   }
 
   console.log("The color value of " + this.id + " has been changed for : " + nColorValue.toString());
@@ -155,7 +156,7 @@ function colorValueTrigger() {
 */
 function colorPickerDisplay () {
   var _colorSpace  = document.getElementById("colorSpace").style.width,//On se sert de la méthode "parseInt" pour transformer la valeur en base 10.
-      _colorPicker = $("#colorPicker");  
+      _colorPicker = $("#colorPicker");
 
   if(_colorPicker.css("display") == "none") {
     anime({
@@ -163,8 +164,8 @@ function colorPickerDisplay () {
       width: '470px',
       duration: 500,
       easing: 'easeInOutExpo'
-    }); 
-    _colorPicker.show(1000); 
+    });
+    _colorPicker.show(1000);
   }
   else {
     _colorPicker.hide(500);
@@ -179,7 +180,7 @@ function colorPickerDisplay () {
 
 /****************Fonctions du bouton de connexion****************/
 function buttonConnectStyle(message, color) {
-  buttonConnect.innerHTML = message; 
+  buttonConnect.innerHTML = message;
   anime.timeline({
     duration: 300,
     easing: 'easeInOutQuad'
@@ -189,7 +190,7 @@ function buttonConnectStyle(message, color) {
 }
 
 function buttonConnectRefresh() {
-  buttonConnect.innerHTML = "Se connecter"; 
+  buttonConnect.innerHTML = "Se connecter";
   anime.timeline({
     duration: 300,
     easing: 'easeInOutQuad'
@@ -227,11 +228,11 @@ function buttonArrowOpen() {
 
 
 
-    
 
+if (buttonConnect == "Connecté") {
 /******************************************
             Les évènements
-******************************************/  
+******************************************/
 /***************Évènement sur support tactile*****************/
   //>>Évènement des curseurs de couleur
 
@@ -258,9 +259,13 @@ function buttonArrowOpen() {
     document.getElementById("blueValue").innerHTML  = pourcentConversion(ui.value);
     sendMessage("01.Clr.B:" + ui.value.toString(), "test");
   });
+  $("#sat").on("slide", function(event, ui){
+    document.getElementById("satValue").innerHTML = pourcentConversion(ui.value);
+    sendMessage("01.Clr.S:" + ui.value.toString(), "test");
+  });
 
   /*
-    On récupère la valeur du color picker grâce à un callback de farbtastic. 
+    On récupère la valeur du color picker grâce à un callback de farbtastic.
     On change ensuite l'afficheur par la couleur sélectionnée.
   */
   $("#colorPicker").farbtastic(function(color) {
@@ -301,14 +306,16 @@ function buttonArrowOpen() {
     $("#swatch").css("background-color", color);
   });
 
-  //>Évènement du "swatch"
+  //>>Évènement du "swatch"
   document.getElementById("swatch").addEventListener('click', colorPickerDisplay);
 
-  //Evènement des boutons de connexion
+  //>>Evènement des boutons de connexion
   document.getElementById("buttonConnect").addEventListener("click", buttonConnectTrigger);
   document.getElementById("buttonConnect").addEventListener("touch", buttonConnectTrigger);
   document.getElementById("buttonArrow").addEventListener("click", buttonArrowOpen);//Voir fichier js de la page
   document.getElementById("buttonArrow").addEventListener("touch", buttonArrowOpen);
+
+  //>>Autorisation d'intervenir sur la page
 
 
 
@@ -322,7 +329,7 @@ function buttonArrowOpen() {
 /******************************************
               Initialisation
 ******************************************/
-$( "#red, #green, #blue" ).slider({
+$( "#red, #green, #blue, #sat" ).slider({
   orientation: "vertical",
   range: "min",
   max: 255,
@@ -335,6 +342,7 @@ $( "#red, #green, #blue" ).slider({
 $( "#red" ).slider( "value", 255);
 $( "#green" ).slider( "value", 140);
 $( "#blue" ).slider( "value", 60);
+$( "#sat").slider("value", 0);
 
 //On initialise le visionneur
 refreshSwatch();
@@ -355,3 +363,6 @@ $(".inputConnect").hide();
 document.getElementById("redValue").innerHTML   = pourcentConversion(_redValue.slider( "value" ));
 document.getElementById("greenValue").innerHTML = pourcentConversion(_greenValue.slider( "value" ));
 document.getElementById("blueValue").innerHTML  = pourcentConversion(_blueValue.slider( "value" ));
+document.getElementById("satValue").innerHTML  = pourcentConversion(_satValue.slider( "value" ));
+
+}
