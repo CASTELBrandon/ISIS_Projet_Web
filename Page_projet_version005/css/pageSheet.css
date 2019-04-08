@@ -59,6 +59,7 @@ p {
   width: 330px;
   height: 200px;
   box-shadow: 0px 0px 3px 1px #0ff;/*Effet néon*/
+  margin: auto;
 }
 
 .colorText {

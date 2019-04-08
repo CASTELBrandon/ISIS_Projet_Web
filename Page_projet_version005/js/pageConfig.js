@@ -26,6 +26,11 @@ var _redValue   = $( "#red" ),
     _satValue   = $( "#sat");
 
 
+
+
+
+
+
 /******************************************
              Initialisation
 ******************************************/
@@ -47,8 +52,10 @@ $( "#sat").slider("value", 0);
 //On initialise le visionneur
 refreshSwatch();
 
+//On cache les fonctions jusqu'à la connexion de l'utilisateur
 $("#colorPicker").hide();
 $(".inputConnect").hide();
+$("#colorSpace").hide();
 
 
 
@@ -252,7 +259,6 @@ function buttonArrowOpen() {
  * déconnecté. Cela a pour but de ne pas donner l'accès à l'utilisateur si les
  * conditions ci-dessous ne sont pas remplies.
  */
-/*
 function permission (access) {
   if (access == true) {
     $("#colorSpace").show(1000);
@@ -261,7 +267,7 @@ function permission (access) {
     $("#colorSpace").hide(1000);
   }
 
-}*/
+}
 
 
 
@@ -298,22 +304,58 @@ function permission (access) {
   /*
     On modifie la valeur des afficheurs R, V, B à chaque modification du slider
     grâce à l'évènement "slide". Les valeurs sont converties en %.
+    On fait varier la valeur de la saturation en fonction de la couleur dominante.
+    On fait également varier les couleur lorsqu'il y a une modification de la
+    saturation.
   */
   $("#red").on("slide", function(event, ui){
     document.getElementById("redValue").innerHTML   = pourcentConversion(ui.value);
     sendMessage("01.Clr.R:" + ui.value.toString(), "test");
+    if ( _redValue.slider("value") > _greenValue.slider("value") && _redValue.slider("value") > _blueValue.slider("value") ) {
+      _satValue.slider("value", _redValue.slider("value"));
+      document.getElementById("satValue").innerHTML = document.getElementById("redValue").innerHTML;
+    }
   });
   $("#green").on("slide", function(event, ui){
     document.getElementById("greenValue").innerHTML = pourcentConversion(ui.value);
     sendMessage("01.Clr.G:" + ui.value.toString(), "test");
+    if ( _greenValue.slider("value") > _redValue.slider("value") && _greenValue.slider("value") > _redValue.slider("value") ) {
+      _satValue.slider("value", _greenValue.slider("value"));
+      document.getElementById("satValue").innerHTML = document.getElementById("greenValue").innerHTML;
+    }
   });
   $("#blue").on("slide", function(event, ui){
     document.getElementById("blueValue").innerHTML  = pourcentConversion(ui.value);
     sendMessage("01.Clr.B:" + ui.value.toString(), "test");
+    if ( _blueValue.slider("value") > _redValue.slider("value") && _blueValue.slider("value") > _greenValue.slider("value") ) {
+      _satValue.slider("value", _blueValue.slider("value"));
+      document.getElementById("satValue").innerHTML = document.getElementById("blueValue").innerHTML;
+    }
   });
   $("#sat").on("slide", function(event, ui){
     document.getElementById("satValue").innerHTML  = pourcentConversion(ui.value);
+    //Condition quand on modifie la valeur de saturation (quelle couleur est dominante ?)
+    /*if (_blueValue.slider("value") != 255 && _blueValue.slider("value") != 0 && _redValue.slider("value") != 255 && _redValue.slider("value") != 0 &&
+        _greenValue.slider("value") != 255 && _greenValue.slider("value") != 0) {
+
+        }*/
   });
+  //Vérification de la valeur par défaut (ouverture de la page)
+  if ( _redValue.slider("value") > _greenValue.slider("value") && _redValue.slider("value") > _blueValue.slider("value") ) {
+
+    _satValue.slider("value", _redValue.slider("value"));
+    document.getElementById("satValue").innerHTML = document.getElementById("redValue").innerHTML;
+
+  } else if ( _greenValue.slider("value") > _redValue.slider("value") && _greenValue.slider("value") > _redValue.slider("value") ) {
+
+    _satValue.slider("value", _greenValue.slider("value"));
+    document.getElementById("satValue").innerHTML = document.getElementById("greenValue").innerHTML;
+
+  } else if ( _blueValue.slider("value") > _redValue.slider("value") && _blueValue.slider("value") > _greenValue.slider("value") ) {
+
+    _satValue.slider("value", _blueValue.slider("value"));
+    document.getElementById("satValue").innerHTML = document.getElementById("blueValue").innerHTML;
+  }
 
 
   /*
