@@ -26,8 +26,29 @@ var _redValue   = $( "#red" ),
     _satValue   = $( "#sat");
 
 
+/******************************************
+             Initialisation
+******************************************/
+$( "#red, #green, #blue, #sat" ).slider({
+  orientation: "vertical",
+  range: "min",
+  max: 255,
+  value: 127,
+  slide: refreshSwatch,
+  change: refreshSwatch
+});
 
+//On intialise les valeurs des curseurs
+$( "#red" ).slider( "value", 255);
+$( "#green" ).slider( "value", 140);
+$( "#blue" ).slider( "value", 60);
+$( "#sat").slider("value", 0);
 
+//On initialise le visionneur
+refreshSwatch();
+
+$("#colorPicker").hide();
+$(".inputConnect").hide();
 
 
 
@@ -100,10 +121,10 @@ function colorValueChangePourcent(id, value) {
         document.getElementById("greenValue").innerHTML = value + "%";
         $("#green").slider("value", binaryLevelConversion(value));
         break;
-      case "valueValue":
+      case "blueValue":
         document.getElementById("blueValue").innerHTML = value + "%";
         $("#blue").slider("value", binaryLevelConversion(value));
-      case "satValue" :
+      default:
         document.getElementById("satValue").innerHTML = value + "%";
         $("#sat").slider("value", binaryLevelConversion(value));
     }
@@ -119,7 +140,7 @@ function colorValueChangeBinary(id, value) {
         document.getElementById("greenValue").innerHTML = pourcentConversion(value);
         $("#green").slider("value", value);
         break;
-      case "blueValue" :
+      default :
         document.getElementById("blueValue").innerHTML = pourcentConversion(value);
         $("#blue").slider("value", value);
     }
@@ -231,11 +252,15 @@ function buttonArrowOpen() {
  * déconnecté. Cela a pour but de ne pas donner l'accès à l'utilisateur si les
  * conditions ci-dessous ne sont pas remplies.
  */
-/*function permission (access) {
-  if (access == true)
+/*
+function permission (access) {
+  if (access == true) {
     $("#colorSpace").show(1000);
-  else if (access == false)
+  }
+  else if (access == false) {
     $("#colorSpace").hide(1000);
+  }
+
 }*/
 
 
@@ -248,12 +273,6 @@ function buttonArrowOpen() {
 /******************************************
             Les évènements
 ******************************************/
-/**
- * Cette fonction est appellée une fois que l'utilisateur est connecté.
- * Elle active toutes les manipulations possible sur la page, hormis
- * la connexion.
- */
-
 
 /***************Évènement sur support tactile*****************/
   //>>Évènement des curseurs de couleur
@@ -295,7 +314,7 @@ function buttonArrowOpen() {
   $("#sat").on("slide", function(event, ui){
     document.getElementById("satValue").innerHTML  = pourcentConversion(ui.value);
   });
-!
+
 
   /*
     On récupère la valeur du color picker grâce à un callback de farbtastic.
@@ -352,43 +371,3 @@ function buttonArrowOpen() {
   document.getElementById("buttonConnect").addEventListener("touch", buttonConnectTrigger);
   document.getElementById("buttonArrow").addEventListener("click", buttonArrowOpen);//Voir fichier js de la page
   document.getElementById("buttonArrow").addEventListener("touch", buttonArrowOpen);
-
-
-
-
-
-
-
-
-
-
-
-/******************************************
-              Initialisation
-******************************************/
-$( "#red, #green, #blue, #sat" ).slider({
-  orientation: "vertical",
-  range: "min",
-  max: 255,
-  value: 127,
-  slide: refreshSwatch,
-  change: refreshSwatch
-});
-
-//On intialise les valeurs des curseurs
-$( "#red" ).slider( "value", 255);
-$( "#green" ).slider( "value", 140);
-$( "#blue" ).slider( "value", 60);
-$( "#sat").slider("value", 0);
-
-//On initialise le visionneur
-refreshSwatch();
-
-
-/**
- * On cache le color picker, les input d'identification et les fonctions jusqu'à
- * connexion.
- */
-$("#colorPicker").hide();
-$(".inputConnect").hide();
-//$("#colorSpace").hide();
