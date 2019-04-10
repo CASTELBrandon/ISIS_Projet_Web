@@ -17,7 +17,7 @@ class MQTTjs {
     this.password = pswd;
     this.flag = true;
     this.reconnectTimeOut = 2000;
-    this.client;
+    this.client = new Paho.MQTT.Client(host, 9001, pswd);
   }
 
   buttonConnectTrigger() {
@@ -61,9 +61,12 @@ class MQTTjs {
     buttonConnectStyle("Connexion...", "#FFA500");
 
     console.log("connecting to " + host + " :9001");
-    this.client = new Paho.MQTT.Client(host, 9001, "01");
+
     var options = {
       //useSSL: true,
+      hosts: host,
+      ports: 9001,
+      clientId: "01",
       userName: user,
       password: passwd,
       onSuccess: this.onConnect,

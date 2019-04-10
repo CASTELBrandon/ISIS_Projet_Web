@@ -168,13 +168,13 @@ function colorValueTrigger() {
     colorValueChangePourcent(this.id, nColorValue);
     switch (this.id) {
       case "redValue":
-        sendMessage("01.Clr.R:" + binaryLevelConversion(nColorValue), "test");
+        sendMessage("01.Clr.R:" + binaryLevelConversion(nColorValue), "general");
         break;
       case "greenValue":
-        sendMessage("01.Clr.G:" + binaryLevelConversion(nColorValue), "test");
+        sendMessage("01.Clr.G:" + binaryLevelConversion(nColorValue), "general");
         break;
       default :
-        sendMessage("01.Clr.B:" + binaryLevelConversion(nColorValue), "test");
+        sendMessage("01.Clr.B:" + binaryLevelConversion(nColorValue), "general");
     }
   }
 
@@ -310,7 +310,7 @@ function permission (access) {
   */
   $("#red").on("slide", function(event, ui){
     document.getElementById("redValue").innerHTML   = pourcentConversion(ui.value);
-    sendMessage("01.Clr.R:" + ui.value.toString(), "test");
+    sendMessage("01.Clr.R:" + ui.value.toString(), "general");
     if ( _redValue.slider("value") > _greenValue.slider("value") && _redValue.slider("value") > _blueValue.slider("value") ) {
       _satValue.slider("value", _redValue.slider("value"));
       document.getElementById("satValue").innerHTML = document.getElementById("redValue").innerHTML;
@@ -318,7 +318,7 @@ function permission (access) {
   });
   $("#green").on("slide", function(event, ui){
     document.getElementById("greenValue").innerHTML = pourcentConversion(ui.value);
-    sendMessage("01.Clr.G:" + ui.value.toString(), "test");
+    sendMessage("01.Clr.G:" + ui.value.toString(), "general");
     if ( _greenValue.slider("value") > _redValue.slider("value") && _greenValue.slider("value") > _redValue.slider("value") ) {
       _satValue.slider("value", _greenValue.slider("value"));
       document.getElementById("satValue").innerHTML = document.getElementById("greenValue").innerHTML;
@@ -326,7 +326,7 @@ function permission (access) {
   });
   $("#blue").on("slide", function(event, ui){
     document.getElementById("blueValue").innerHTML  = pourcentConversion(ui.value);
-    sendMessage("01.Clr.B:" + ui.value.toString(), "test");
+    sendMessage("01.Clr.B:" + ui.value.toString(), "general");
     if ( _blueValue.slider("value") > _redValue.slider("value") && _blueValue.slider("value") > _greenValue.slider("value") ) {
       _satValue.slider("value", _blueValue.slider("value"));
       document.getElementById("satValue").innerHTML = document.getElementById("blueValue").innerHTML;
@@ -375,7 +375,7 @@ function permission (access) {
       //Changement des valeurs de pourcentage
       document.getElementById("redValue").innerHTML   = pourcentConversion(_redValue.slider( "value" ));
       //Envoi des valeurs au serveur
-      sendMessage("01.Clr.R:" + _redValue.slider("value"), "test");
+      sendMessage("01.Clr.R:" + _redValue.slider("value"), "general");
     }
 
     if (colorArray[1] !== initValues[1]) {
@@ -384,7 +384,7 @@ function permission (access) {
       //Changement des valeurs de pourcentage
       document.getElementById("greenValue").innerHTML = pourcentConversion(_greenValue.slider( "value" ));
       //Envoi des valeurs au serveur
-      sendMessage("01.Clr.G:" + _greenValue.slider( "value" ), "test");
+      sendMessage("01.Clr.G:" + _greenValue.slider( "value" ), "general");
     }
 
     if (colorArray[2] !== initValues[2]) {
@@ -393,7 +393,7 @@ function permission (access) {
       //Changement des valeurs de pourcentage
       document.getElementById("blueValue").innerHTML  = pourcentConversion(_blueValue.slider( "value" ));
       //Envoi des valeurs au serveur
-      sendMessage("01.Clr.B:" + _blueValue.slider( "value" ), "test");
+      sendMessage("01.Clr.B:" + _blueValue.slider( "value" ), "general");
     }
 
     //Changement de la couleur du swatch

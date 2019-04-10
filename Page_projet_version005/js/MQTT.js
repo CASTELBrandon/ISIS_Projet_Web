@@ -77,10 +77,8 @@ function onConnect() {
 
 	//Fonction de connexion
 	console.log("Connected");
-	var message = new Paho.MQTT.Message("New Test 2");
-	message.destinationName = "test";
 	client.subscribe("#");
-	client.send(message);
+	sendMessage("01.Sys.R:0","general");
 	permission(true); //On affiche les fonctions si on est connecté
 	flag = false;
 }
