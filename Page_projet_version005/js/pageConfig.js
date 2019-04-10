@@ -25,6 +25,15 @@ var _redValue   = $( "#red" ),
     _blueValue  = $( "#blue" ),
     _satValue   = $( "#sat");
 
+//On crée de nouveau slider
+var parent = document.getElementById("colorSpace");
+var premier_fils = parent.firstChild;
+
+var sliderMaster = new slider("master", 0, premier_fils);
+sliderMaster.createSlider();
+var slider1 = new slider("1", 0, premier_fils);
+slider1.createSlider();
+
 
 
 
@@ -48,6 +57,7 @@ $( "#red" ).slider( "value", 255);
 $( "#green" ).slider( "value", 140);
 $( "#blue" ).slider( "value", 60);
 $( "#sat").slider("value", 0);
+sliderMaster.jqueryId.slider("value", 255);
 
 //On initialise le visionneur
 refreshSwatch();
@@ -147,9 +157,12 @@ function colorValueChangeBinary(id, value) {
         document.getElementById("greenValue").innerHTML = pourcentConversion(value);
         $("#green").slider("value", value);
         break;
-      default :
+      case "blueValue":
         document.getElementById("blueValue").innerHTML = pourcentConversion(value);
         $("#blue").slider("value", value);
+      case "masterValue":
+        document.getElementById("masterValue").innerHTML = pourcentConversion(value);
+        $("#master").slider("value", value);
     }
 }
 
@@ -340,6 +353,11 @@ function permission (access) {
 
         }*/
   });
+  sliderMaster.jqueryId.on("slide", function(event, ui){
+    document.getElementById("masterValue").innerHTML  = pourcentConversion(ui.value);
+    sendMessage("01.Mtr.V:" + ui.value.toString(), "general");
+  });
+
   //Vérification de la valeur par défaut (ouverture de la page)
   if ( _redValue.slider("value") > _greenValue.slider("value") && _redValue.slider("value") > _blueValue.slider("value") ) {
 

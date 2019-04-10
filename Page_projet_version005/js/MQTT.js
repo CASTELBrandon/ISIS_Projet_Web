@@ -115,6 +115,9 @@ function onMessageArrived(message) {
 		case "00.Clr.B":
 			colorValueChangeBinary("blueValue", value);
 			break;
+		case "00.Mtr.V":
+			colorValueChangeBinary("masterValue", value);
+			break;
 	}
 }
 
