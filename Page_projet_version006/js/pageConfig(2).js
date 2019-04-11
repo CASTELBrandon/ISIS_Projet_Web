@@ -29,6 +29,14 @@ var _redValue   = $( "#red" ),
 var parent = document.getElementById("colorSpace");
 var premier_fils = parent.firstChild;
 
+var sliderBlue = new slider("blue", 255, premier_fils);
+sliderBlue.createSlider();
+var sliderGreen =  new slider("green", 10, premier_fils);
+sliderGreen.createSlider();
+var sliderRed = new slider("red", 128, premier_fils);
+sliderRed.createSlider();
+
+
 var sliderMaster = new slider("master", 0, premier_fils);
 sliderMaster.createSlider();
 var slider1 = new slider("1", 0, premier_fils);
@@ -43,14 +51,14 @@ slider1.createSlider();
 /******************************************
              Initialisation
 ******************************************/
-$( "#red, #green, #blue, #sat" ).slider({
+/*$( "#red, #green, #blue, #sat" ).slider({
   orientation: "vertical",
   range: "min",
   max: 255,
   value: 127,
   slide: refreshSwatch,
   change: refreshSwatch
-});
+});*/
 
 //On intialise les valeurs des curseurs
 $( "#red" ).slider( "value", 255);

@@ -107,13 +107,13 @@ function onMessageArrived(message) {
 
 	switch (id) {
 		case "00.Clr.R":
-			colorValueChangeBinary("redValue", value);
+			sliderRed.setValueSlider(value, pourcentConversion(value));
 			break;
 		case "00.Clr.G":
-			colorValueChangeBinary("greenValue", value);
+			sliderGreen.setValueSlider(value, pourcentConversion(value));
 			break;
 		case "00.Clr.B":
-			colorValueChangeBinary("blueValue", value);
+			sliderBlue.setValueSlider(value , pourcentConversion(value));
 			break;
 		case "00.Mtr.V":
 			sliderMaster.setValueSlider(value , pourcentConversion(value));
