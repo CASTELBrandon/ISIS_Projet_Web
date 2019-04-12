@@ -113,34 +113,6 @@ function refreshSwatch() {
 }
 
 /*
-  Cette fonction récupère l'objet qui a déclenché l'évènement (donc la fonction)
-  à l'aide de "this" et récupère l'id de cette objet. On cherche à savoir si c'est
-  l'objet rouge, vert ou bleu qui l'a déclenché. Puis, on demande à l'utilisateur
-  la nouvelle valeur du curseur.
-*/
-function colorValueTrigger() {
-  var nColorValue = Number(prompt("New value ?"));
-  if (nColorValue > 100 || nColorValue < 0) {
-    alert("Veuillez donner une valeur comprise entre 0 et 100%.")
-  }
-  else {
-    colorValueChangePourcent(this.id, nColorValue);
-    switch (this.id) {
-      case "redValue":
-        sendMessage("01.Clr.R:" + binaryLevelConversion(nColorValue), "general");
-        break;
-      case "greenValue":
-        sendMessage("01.Clr.G:" + binaryLevelConversion(nColorValue), "general");
-        break;
-      default :
-        sendMessage("01.Clr.B:" + binaryLevelConversion(nColorValue), "general");
-    }
-  }
-
-  console.log("The color value of " + this.id + " has been changed for : " + nColorValue.toString());
-}
-
-/*
   Cette fonction affiche un sélectionneur de couleur lorsque l'on clique sur
   le visualiseur de couleur. Elle aggrandit et rétrécit également le "div" des couleurs.
 */
@@ -295,7 +267,8 @@ function permission (access) {
     }
 
     if (colorArray[1] !== initValues[1]) {
-      //Affectation des nouvelles valeurs
+      //Affectation des nouvelles valeuvar sliderMaster = new slider("master", 0, premier_fils);
+sliderMaster.createSlider();rs
       _greenValue.slider( "value" , colorArray[1]);
       //Changement des valeurs de pourcentage
       document.getElementById("greenValue").innerHTML = pourcentConversion(_greenValue.slider( "value" ));

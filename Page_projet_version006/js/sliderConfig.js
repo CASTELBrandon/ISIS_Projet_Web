@@ -19,6 +19,7 @@ class slider {
    */
   createSlider() {
     var nameValue = this.nameValueSlider;
+    var nameSlider = this.nameSlider;
 
     //On lance les commandes html
     this.htmlConfigSlider();
@@ -45,7 +46,33 @@ class slider {
     });
 
     //Demande d'insérer une valeur lorsque l'on clique sur l'afficheur
-    this.jqueryId.click(this.valueTrigger());
+    document.getElementById(nameValue).addEventListener("click" , function() {
+
+      //On demande à choisir une valeur en pourcentage entre 0 et 100
+      var nValue = Number(prompt("New value ?"));
+      //On la convertie en binaire
+      var nValueBinary = binaryLevelConversion(nValue);
+
+      if (nValue > 100 || nValue < 0) {
+        alert("Veuillez donner une valeur comprise entre 0 et 100%.")
+      }
+      else {
+        document.getElementById(nameValue).innerHTML = nValue + "%";
+        $("#"+nameSlider+"").slider("value", nValueBinary);
+        /*switch (this.id) {
+          case "redValue":
+            sendMessage("01.Clr.R:" + binaryLevelConversion(nValue), "general");
+            break;
+          case "greenValue":
+            sendMessage("01.Clr.G:" + binaryLevelConversion(nValue), "general");
+            break;
+          default :
+            sendMessage("01.Clr.B:" + binaryLevelConversion(nValue), "general");
+        }*/
+      }
+
+      console.log("The color value of " + this.id + " has been changed for : " + nValue.toString());
+    });
   }
 
   /**
@@ -87,32 +114,6 @@ class slider {
   setValueSlider(binaryValue, pourcentValue) {
     document.getElementById(this.nameSlider + "Value").innerHTML = pourcentValue + "%";
     this.jqueryId.slider("value", binaryValue);
-  }
-
-  valueTrigger(e) {
-    //On demande à choisir une valeur en pourcentage entre 0 et 100
-    var nValue = Number(prompt("New value ?"));
-    if (nValue > 100 || nValue < 0) {
-      alert("Veuillez donner une valeur comprise entre 0 et 100%.")
-    }
-    else {
-      this.setValueSlider(binaryLevelConversion(nValue), nValue);
-      /*switch (this.id) {
-        case "redValue":
-          sendMessage("01.Clr.R:" + binaryLevelConversion(nValue), "general");
-          break;
-        case "greenValue":
-          sendMessage("01.Clr.G:" + binaryLevelConversion(nValue), "general");
-          break;
-        default :
-          sendMessage("01.Clr.B:" + binaryLevelConversion(nValue), "general");
-      }*/
-    }
-
-    console.log("The color value of " + this.id + " has been changed for : " + nValue.toString());
-
-    //On empèche l'évènement de se répéter sur les autres
-    e.stopPropagation();
   }
 
   /**
