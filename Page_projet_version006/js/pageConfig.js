@@ -2,7 +2,7 @@
   Ce code source permet de gérer les animations et la gestion
   de la page web.
 
-  08-04-19
+  12-04-19
   CASTEL Brandon
 */
 
@@ -32,8 +32,6 @@ var premier_fils = parent.firstChild;
 
 var sliderMaster = new slider("master", 0, premier_fils);
 sliderMaster.createSlider();
-var slider1 = new slider("1", 0, premier_fils);
-slider1.createSlider();
 var sliderRed = new slider("red", 128, premier_fils);
 sliderRed.createSlider();
 var sliderGreen =  new slider("green", 10, premier_fils);
@@ -46,21 +44,6 @@ sliderBlue.createSlider();
 /******************************************
              Initialisation
 ******************************************/
-/*$( "#red, #green, #blue, #sat" ).slider({
-  orientation: "vertical",
-  range: "min",
-  max: 255,
-  value: 127,
-  slide: refreshSwatch,
-  change: refreshSwatch
-});*/
-
-//On intialise les valeurs des curseurs
-sliderRed.setValueSlider(200, pourcentConversion(200));
-sliderGreen.setValueSlider(140, pourcentConversion(140));
-sliderBlue.setValueSlider(60, pourcentConversion(60));
-sliderMaster.setValueSlider(255,pourcentConversion(255));
-
 //On initialise le visionneur
 refreshSwatch();
 
@@ -83,7 +66,7 @@ $(document).ready(function() {
   Cette fonction convertie les valeurs binaires en pourcentage.
 */
 function pourcentConversion(binaryValue) {
-  return Math.round((binaryValue*100)/255) + "%";
+  return Math.round((binaryValue*100)/255);
 }
 
 /*
@@ -289,10 +272,7 @@ function permission (access) {
 
         }
   });*/
-  sliderMaster.jqueryId.on("slide", function(event, ui){
-    document.getElementById("masterValue").innerHTML  = pourcentConversion(ui.value);
-    sendMessage("01.Mtr.V:" + ui.value.toString(), "general");
-  });
+
 
   /*
     On récupère la valeur du color picker grâce à un callback de farbtastic.

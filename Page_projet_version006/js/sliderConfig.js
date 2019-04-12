@@ -2,7 +2,7 @@
  * Cette page gère les fonctions des sliders sous forme d'objet
  *
  * CASTEL Brandon
- * 09-04-19
+ * 12-04-19
  */
 
 class slider {
@@ -11,12 +11,15 @@ class slider {
     this.nameSlider  = nameSlider;
     this.valueSlider = valueSlider;
     this.previousDiv = previousDiv;
+    this.nameValueSlider = nameSlider + "Value";
   }
 
   /**
    * La fonction crée le slider avec tous les paramètres nécessaires.
    */
   createSlider() {
+    var nameValue = this.nameValueSlider;
+
     //On lance les commandes html
     this.htmlConfigSlider();
 
@@ -29,14 +32,20 @@ class slider {
       slide: refreshSwatch,
       change: refreshSwatch
     });
-  }
 
-  /**
-   * Retourne la notation du slider sous forme d'écriture jquery
-   * @return {[text]} [Id jquery]
-   */
-  get jqueryId() {
-    return $("#"+this.nameSlider+"");
+    //On lui applique une valeur d'Initialisation
+    this.setValueSlider(this.valueSlider,pourcentConversion(this.valueSlider));
+
+    /*******Evènements*******/
+
+    //Changement des valeurs et envoi des messages quand on agit sur le slider
+    this.jqueryId.on("slide", function(event, ui){
+      document.getElementById(nameValue).innerHTML = pourcentConversion(ui.value);
+      sendMessage("01.Mtr.V:" + ui.value.toString(), "general");
+    });
+
+    //Demande d'insérer une valeur lorsque l'on clique sur l'afficheur
+    this.jqueryId.click(this.valueTrigger());
   }
 
   /**
@@ -78,5 +87,39 @@ class slider {
   setValueSlider(binaryValue, pourcentValue) {
     document.getElementById(this.nameSlider + "Value").innerHTML = pourcentValue + "%";
     this.jqueryId.slider("value", binaryValue);
+  }
+
+  valueTrigger(e) {
+    //On demande à choisir une valeur en pourcentage entre 0 et 100
+    var nValue = Number(prompt("New value ?"));
+    if (nValue > 100 || nValue < 0) {
+      alert("Veuillez donner une valeur comprise entre 0 et 100%.")
+    }
+    else {
+      this.setValueSlider(binaryLevelConversion(nValue), nValue);
+      /*switch (this.id) {
+        case "redValue":
+          sendMessage("01.Clr.R:" + binaryLevelConversion(nValue), "general");
+          break;
+        case "greenValue":
+          sendMessage("01.Clr.G:" + binaryLevelConversion(nValue), "general");
+          break;
+        default :
+          sendMessage("01.Clr.B:" + binaryLevelConversion(nValue), "general");
+      }*/
+    }
+
+    console.log("The color value of " + this.id + " has been changed for : " + nValue.toString());
+
+    //On empèche l'évènement de se répéter sur les autres
+    e.stopPropagation();
+  }
+
+  /**
+   * Retourne la notation du slider sous forme d'écriture jquery
+   * @return {[text]} [Id jquery]
+   */
+  get jqueryId() {
+    return $("#"+this.nameSlider+"");
   }
 }
