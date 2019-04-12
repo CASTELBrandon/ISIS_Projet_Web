@@ -96,23 +96,23 @@ function onConnectionLost(message) {
   	//setTimeout(MQTTconnect, reconnectTimeout);
   	console.log("connection lost: " + message.errorMessage + ".");
   	buttonConnectRefresh();
-		!permission(false);//Si on perd la connexion on désactive l'accès aux fonctions
+		permission(false);//Si on perd la connexion on désactive l'accès aux fonctions
 }
 
 function onMessageArrived(message) {
 	var mesReceiv = message.payloadString,
-		value = mesReceiv.substr(9),
-		id = mesReceiv.slice(0,8);
+			value = mesReceiv.substr(9),
+			id = mesReceiv.slice(0,8);
 	console.log(mesReceiv);
 
 	switch (id) {
-		case "00.Clr.R":
+		case "00.Red.V":
 			sliderRed.setValueSlider(value, pourcentConversion(value));
 			break;
-		case "00.Clr.G":
+		case "00.Gre.V":
 			sliderGreen.setValueSlider(value, pourcentConversion(value));
 			break;
-		case "00.Clr.B":
+		case "00.Blu.V":
 			sliderBlue.setValueSlider(value , pourcentConversion(value));
 			break;
 		case "00.Mtr.V":
@@ -123,6 +123,6 @@ function onMessageArrived(message) {
 
 function sendMessage(message, topic) {
 	var mes = new Paho.MQTT.Message(message);
-  	mes.destinationName = topic;
-  	client.send(mes);
+  		mes.destinationName = topic;
+  		client.send(mes);
 }

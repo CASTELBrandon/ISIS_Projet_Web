@@ -7,11 +7,12 @@
 
 class slider {
 
-  constructor (nameSlider, valueSlider, previousDiv) {
+  constructor (nameSlider, idMessage, valueSlider, previousDiv) {
     this.nameSlider  = nameSlider;
     this.valueSlider = valueSlider;
     this.previousDiv = previousDiv;
     this.nameValueSlider = nameSlider + "Value";
+    this.idMessage = idMessage;
   }
 
   /**
@@ -20,6 +21,7 @@ class slider {
   createSlider() {
     var nameValue = this.nameValueSlider;
     var nameSlider = this.nameSlider;
+    var idMessage = this.idMessage;
 
     //On lance les commandes html
     this.htmlConfigSlider();
@@ -42,7 +44,7 @@ class slider {
     //Changement des valeurs et envoi des messages quand on agit sur le slider
     this.jqueryId.on("slide", function(event, ui){
       document.getElementById(nameValue).innerHTML = pourcentConversion(ui.value);
-      sendMessage("01.Mtr.V:" + ui.value.toString(), "general");
+      sendMessage("01."+idMessage+":" + ui.value.toString(), "general");
     });
 
     //Demande d'insérer une valeur lorsque l'on clique sur l'afficheur
@@ -57,7 +59,7 @@ class slider {
         alert("Veuillez donner une valeur comprise entre 0 et 100%.")
       }
       else {
-        document.getElementById(nameValue).innerHTML = nValue + "%";
+        document.getElementById(nameValue).innerHTML = nValue;
         $("#"+nameSlider+"").slider("value", nValueBinary);
         /*switch (this.id) {
           case "redValue":
@@ -112,7 +114,7 @@ class slider {
    * @param {value} binaryValue   [Value in binary]
    */
   setValueSlider(binaryValue, pourcentValue) {
-    document.getElementById(this.nameSlider + "Value").innerHTML = pourcentValue + "%";
+    document.getElementById(this.nameSlider + "Value").innerHTML = pourcentValue;
     this.jqueryId.slider("value", binaryValue);
   }
 

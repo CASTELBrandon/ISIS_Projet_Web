@@ -30,13 +30,13 @@ var parent = document.getElementById("colorSpace");
 var premier_fils = parent.firstChild;
 
 
-var sliderMaster = new slider("master", 0, premier_fils);
+var sliderMaster = new slider("master", "Mtr.V", 0, premier_fils);
 sliderMaster.createSlider();
-var sliderRed = new slider("red", 128, premier_fils);
+var sliderRed = new slider("red", "Red.V", 128, premier_fils);
 sliderRed.createSlider();
-var sliderGreen =  new slider("green", 10, premier_fils);
+var sliderGreen =  new slider("green", "Gre.V", 10, premier_fils);
 sliderGreen.createSlider();
-var sliderBlue = new slider("blue", 255, premier_fils);
+var sliderBlue = new slider("blue", "Blu.V", 255, premier_fils);
 sliderBlue.createSlider();
 
 
@@ -212,40 +212,6 @@ function permission (access) {
 
 
 /***************Évènement sur support cliquable***************/
-  //>>Évènement des curseurs de couleur
-  document.getElementById("redValue").addEventListener('click', colorValueTrigger);
-  document.getElementById("greenValue").addEventListener('click', colorValueTrigger);
-  document.getElementById("blueValue").addEventListener('click', colorValueTrigger);
-
-  /*
-    On modifie la valeur des afficheurs R, V, B à chaque modification du slider
-    grâce à l'évènement "slide". Les valeurs sont converties en %.
-    On fait varier la valeur de la saturation en fonction de la couleur dominante.
-    On fait également varier les couleur lorsqu'il y a une modification de la
-    saturation.
-  */
-  sliderRed.jqueryId.on("slide", function(event, ui){
-    document.getElementById("redValue").innerHTML   = pourcentConversion(ui.value);
-    sendMessage("01.Clr.R:" + ui.value.toString(), "general");
-  });
-  sliderGreen.jqueryId.on("slide", function(event, ui){
-    document.getElementById("greenValue").innerHTML = pourcentConversion(ui.value);
-    sendMessage("01.Clr.G:" + ui.value.toString(), "general");
-  });
-  sliderBlue.jqueryId.on("slide", function(event, ui){
-    document.getElementById("blueValue").innerHTML  = pourcentConversion(ui.value);
-    sendMessage("01.Clr.B:" + ui.value.toString(), "general");
-  });
-  /*$("#sat").on("slide", function(event, ui){
-    document.getElementById("satValue").innerHTML  = pourcentConversion(ui.value);
-    //Condition quand on modifie la valeur de saturation (quelle couleur est dominante ?)
-    /*if (_blueValue.slider("value") != 255 && _blueValue.slider("value") != 0 && _redValue.slider("value") != 255 && _redValue.slider("value") != 0 &&
-        _greenValue.slider("value") != 255 && _greenValue.slider("value") != 0) {
-
-        }
-  });*/
-
-
   /*
     On récupère la valeur du color picker grâce à un callback de farbtastic.
     On change ensuite l'afficheur par la couleur sélectionnée.
@@ -268,7 +234,6 @@ function permission (access) {
 
     if (colorArray[1] !== initValues[1]) {
       //Affectation des nouvelles valeuvar sliderMaster = new slider("master", 0, premier_fils);
-sliderMaster.createSlider();rs
       _greenValue.slider( "value" , colorArray[1]);
       //Changement des valeurs de pourcentage
       document.getElementById("greenValue").innerHTML = pourcentConversion(_greenValue.slider( "value" ));
