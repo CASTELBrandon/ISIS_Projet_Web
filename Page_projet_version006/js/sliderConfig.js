@@ -7,12 +7,15 @@
 
 class slider {
 
-  constructor (nameSlider, idMessage, valueSlider, previousDiv) {
+  constructor (nameSlider, idMessage, valueSlider, parentDiv, previousDiv) {
     this.nameSlider  = nameSlider;
     this.valueSlider = valueSlider;
     this.previousDiv = previousDiv;
     this.nameValueSlider = nameSlider + "Value";
     this.idMessage = idMessage;
+    this.parent = parentDiv;
+    this.flagChroma = false;
+
   }
 
   /**
@@ -24,7 +27,7 @@ class slider {
     var idMessage = this.idMessage;
 
     //On lance les commandes html
-    this.htmlConfigSlider();
+    var chromaEvent = this.htmlConfigSlider();
 
     //On initialise le slider
     this.jqueryId.slider({
@@ -61,20 +64,16 @@ class slider {
       else {
         document.getElementById(nameValue).innerHTML = nValue;
         $("#"+nameSlider+"").slider("value", nValueBinary);
-        /*switch (this.id) {
-          case "redValue":
-            sendMessage("01.Clr.R:" + binaryLevelConversion(nValue), "general");
-            break;
-          case "greenValue":
-            sendMessage("01.Clr.G:" + binaryLevelConversion(nValue), "general");
-            break;
-          default :
-            sendMessage("01.Clr.B:" + binaryLevelConversion(nValue), "general");
-        }*/
       }
 
       console.log("The color value of " + this.id + " has been changed for : " + nValue.toString());
     });
+
+    //On crée l'évènement d'affichage de la zone RVB lorsqu'on clique sur les boutons "C"
+    document.getElementById(chromaEvent.id).addEventListener("click", function() {;
+      $("#colorSpace").show(1000);
+    });
+
   }
 
   /**
@@ -104,8 +103,18 @@ class slider {
     newSlider.className = "slider";
     newSliderZone.appendChild(newSlider);//On l'ajoute dans le div global
 
+    //On crée un bouton de chromaticité
+    var newChromaButton = document.createElement('button');
+    newChromaButton.title = "Color Management";
+    newChromaButton.id = this.nameSlider + "Chroma";
+    newChromaButton.className = "chromaButton";
+    newChromaButton.innerHTML = "C";
+    newSliderZone.appendChild(newChromaButton);//On l'ajoute dans le div global
+
     //On applique le nouveau slider avant l'élèment indiqué dans le constructeur
-    parent.insertBefore(newSliderZone, this.previousDiv);
+    this.parent.insertBefore(newSliderZone, this.previousDiv);
+
+    return newChromaButton;
   }
 
   /**

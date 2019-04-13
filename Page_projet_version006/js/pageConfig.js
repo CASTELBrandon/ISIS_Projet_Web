@@ -26,17 +26,24 @@ var _redValue   = $( "#red" ),
     _satValue   = $( "#sat");
 
 //On crée de nouveau slider
-var parent = document.getElementById("colorSpace");
-var premier_fils = parent.firstChild;
+var parentFader = document.getElementById("faderSpace");
+var firstChild = parentFader.firstChild;
 
-
-var sliderMaster = new slider("master", "Mtr.V", 0, premier_fils);
+var sliderMaster = new slider("master", "Mtr.V", 0, parentFader, firstChild);
 sliderMaster.createSlider();
-var sliderRed = new slider("red", "Red.V", 128, premier_fils);
+var slider1 = new slider("1", "Fd1.V", 0, parentFader, firstChild);
+slider1.createSlider();
+var slider2 = new slider("2", "Fd2.V", 0, parentFader, firstChild);
+slider2.createSlider();
+
+var parentColor = document.getElementById("colorSpace");
+var secondChild = parentColor.firstChild;
+
+var sliderRed = new slider("red", "Red.V", 128, parentColor, secondChild);
 sliderRed.createSlider();
-var sliderGreen =  new slider("green", "Gre.V", 10, premier_fils);
+var sliderGreen =  new slider("green", "Gre.V", 10, parentColor, secondChild);
 sliderGreen.createSlider();
-var sliderBlue = new slider("blue", "Blu.V", 255, premier_fils);
+var sliderBlue = new slider("blue", "Blu.V", 255, parentColor, secondChild);
 sliderBlue.createSlider();
 
 
@@ -51,6 +58,7 @@ refreshSwatch();
 $("#colorPicker").hide();
 $(".inputConnect").hide();
 $("#colorSpace").hide();
+$("#faderSpace").hide();
 
 //On amorce le color picker
 $(document).ready(function() {
@@ -121,22 +129,22 @@ function colorPickerDisplay () {
       _colorPicker = $("#colorPicker");
 
   if(_colorPicker.css("display") == "none") {
-    anime({
+    /*anime({
       targets: '#colorSpace',
       width: '530px',
       duration: 500,
       easing: 'easeInOutExpo'
-    });
+    });*/
     _colorPicker.show(1000);
   }
   else {
     _colorPicker.hide(500);
-    anime({
+    /*anime({
       targets: '#colorSpace',
       width: '330px',
       duration: 1000,
       easing: 'easeInOutExpo'
-    });
+    });*/
   }
 }
 
@@ -194,9 +202,10 @@ function buttonArrowOpen() {
  */
 function permission (access) {
   if (access == true) {
-    $("#colorSpace").show(1000);
+    $("#faderSpace").show(1000);
   }
   else if (access == false) {
+    $("#faderSpace").hide(1000);
     $("#colorSpace").hide(1000);
   }
 
@@ -221,33 +230,28 @@ function permission (access) {
     var colorArray = rgbFromHEX(color);
 
     //Valeurs initiales
-    var initValues = [_redValue.slider("value"), _greenValue.slider("value"), _blueValue.slider("value")];
+    var initValues = [sliderRed.jqueryId.slider("value"), sliderGreen.jqueryId.slider("value"), sliderBlue.jqueryId.slider("value")];
 
     if (colorArray[0] !== initValues[0]) {
-      //Affectation des nouvelles valeurs
-      _redValue.slider( "value" , colorArray[0]);
-      //Changement des valeurs de pourcentage
-      document.getElementById("redValue").innerHTML   = pourcentConversion(_redValue.slider( "value" ));
+      //Modification des valeurs
+      sliderRed.setValueSlider(colorArray[0], pourcentConversion(colorArray[0]));
       //Envoi des valeurs au serveur
-      sendMessage("01.Clr.R:" + _redValue.slider("value"), "general");
+      sendMessage("01."+sliderRed.idMessage+":" + initValues[0], "general");
     }
 
     if (colorArray[1] !== initValues[1]) {
-      //Affectation des nouvelles valeuvar sliderMaster = new slider("master", 0, premier_fils);
-      _greenValue.slider( "value" , colorArray[1]);
-      //Changement des valeurs de pourcentage
-      document.getElementById("greenValue").innerHTML = pourcentConversion(_greenValue.slider( "value" ));
+      //Modification des valeurs
+      sliderGreen.setValueSlider(colorArray[1], pourcentConversion(colorArray[1]));
       //Envoi des valeurs au serveur
-      sendMessage("01.Clr.G:" + _greenValue.slider( "value" ), "general");
+      sendMessage("01."+sliderGreen.idMessage+":" + initValues[1], "general");
     }
 
+
     if (colorArray[2] !== initValues[2]) {
-      //Affectation des nouvelles valeurs
-      _blueValue.slider( "value" , colorArray[2]);
-      //Changement des valeurs de pourcentage
-      document.getElementById("blueValue").innerHTML  = pourcentConversion(_blueValue.slider( "value" ));
+      //Modification des valeurs
+      sliderBlue.setValueSlider(colorArray[2], pourcentConversion(colorArray[2]));
       //Envoi des valeurs au serveur
-      sendMessage("01.Clr.B:" + _blueValue.slider( "value" ), "general");
+      sendMessage("01."+sliderBlue.idMessage+":" + initValues[2], "general");
     }
 
     //Changement de la couleur du swatch

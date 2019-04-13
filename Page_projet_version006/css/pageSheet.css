@@ -15,6 +15,11 @@ p {
   color: #00FFFF;
 }
 
+.header{
+  font-style: italic;
+  float: left;
+}
+
 
 /*************************************/
 /*Propriété des éléments de connexion*/
@@ -48,6 +53,33 @@ p {
    box-shadow: 0px 0px 3px 1px #0ff;/*Effet néon*/
 }
 
+#controlSpace {
+  display: flex;
+}
+
+/*******************************************/
+/*Propriété de la partie gestion des faders*/
+/*******************************************/
+
+#faderSpace {
+  border: 1px;
+  border-style: solid;
+  border-radius: 5px;
+  border-color: #00FFFF;/*Cyan*/
+  width: auto;
+  height: auto;
+  box-shadow: 0px 0px 3px 1px #0ff;/*Effet néon*/
+  margin: auto;
+  display: flex;
+}
+
+
+
+
+
+
+
+
 /*******************************************/
 /*Propriété de la partie gestion de couleur*/
 /*******************************************/
@@ -56,21 +88,22 @@ p {
   border-style: solid;
   border-radius: 5px;
   border-color: #00FFFF;/*Cyan*/
-  width: 400px;
-  height: 200px;
+  width: auto;
+  height: auto;
   box-shadow: 0px 0px 3px 1px #0ff;/*Effet néon*/
   margin: auto;
+  display: flex;
 }
 
 .colorText {
   margin: 1px;
   color: White;
+  text-align: center;
 }
 
 /*Gestion des sliders*/
 .sliderZone {
-  float: left;
-  width: 10px;
+  width: 40px;
   margin: 16px;
 }
 .sliderValue {
@@ -86,12 +119,30 @@ p {
 
 }
 .slider {
-  float: left;
   width: 10px;
   margin: 13px;
   margin-top: 15px;
   position: center;
 }
+
+/*Boutons de gestion des couleurs*/
+.chromaButton {
+  background-color: #282923;
+  border-style: none;
+  font-size: 10px;
+  font-weight: bold;
+  color: White;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 3px 1px #0ff;/*Effet néon*/
+  margin-left: 7px;
+  margin-top: 5px;
+}
+.chromaButton:hover {
+  background-color: #00FFFF;
+}
+
 #red .ui-slider-range { background: #ef2929; }
 #red .ui-slider-handle { border-color: #00FFFF; }
 #green .ui-slider-range { background: #8ae234; }
@@ -101,20 +152,21 @@ p {
 
 /*ColorPicker*/
 #colorPicker {
-  transform-origin: 0 0;
   transform: scale(0.7,0.7);
-  float: left;
-  margin-top: 12px;
+  margin: auto;
 }
 
 /*Afficheur de couleur*/
 #swatch {
-  float: left;
   width: 100px;
   height: 100px;
   background-image: none;
   border-radius: 50%;
   border-color: #00FFFF;
-  margin: 20px;
-  margin-top: 30px;
+  margin: auto;
+  padding: 10px;
+}
+
+.space {
+  width: 10px;
 }
