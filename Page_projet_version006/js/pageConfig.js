@@ -20,11 +20,6 @@ var buttonConnect = document.getElementById("buttonConnect");
 //Flag
 var flag_buttonArrow=false;
 
-var _redValue   = $( "#red" ),
-    _greenValue = $( "#green" ),
-    _blueValue  = $( "#blue" ),
-    _satValue   = $( "#sat");
-
 //On crée de nouveau slider
 var parentFader = document.getElementById("faderSpace");
 var firstChild = parentFader.firstChild;

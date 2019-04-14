@@ -14,8 +14,7 @@ class slider {
     this.nameValueSlider = nameSlider + "Value";
     this.idMessage = idMessage;
     this.parent = parentDiv;
-    this.flagChroma = false;
-
+    this.access = false;
   }
 
   /**
@@ -25,9 +24,11 @@ class slider {
     var nameValue = this.nameValueSlider;
     var nameSlider = this.nameSlider;
     var idMessage = this.idMessage;
+    var access = this.access;
+    var chromaButtonId = this.getChromaButton.id;
 
     //On lance les commandes html
-    var chromaEvent = this.htmlConfigSlider();
+    this.htmlConfigSlider();
 
     //On initialise le slider
     this.jqueryId.slider({
@@ -70,10 +71,17 @@ class slider {
     });
 
     //On crée l'évènement d'affichage de la zone RVB lorsqu'on clique sur les boutons "C"
-    document.getElementById(chromaEvent.id).addEventListener("click", function() {;
-      $("#colorSpace").show(1000);
-    });
-
+    if (this.nameSlider !== "red" && this.nameSlider !== "green" && this.nameSlider !== "blue") {
+      document.getElementById(chromaButtonId).addEventListener("click", function() {
+        if (access == false) {
+          $("#colorSpace").show(1000);
+          access = true;
+        } else if (access == true) {
+          $("#colorSpace").hide(1000);
+          access = false;
+        }
+      });
+    }
   }
 
   /**
@@ -104,17 +112,11 @@ class slider {
     newSliderZone.appendChild(newSlider);//On l'ajoute dans le div global
 
     //On crée un bouton de chromaticité
-    var newChromaButton = document.createElement('button');
-    newChromaButton.title = "Color Management";
-    newChromaButton.id = this.nameSlider + "Chroma";
-    newChromaButton.className = "chromaButton";
-    newChromaButton.innerHTML = "C";
-    newSliderZone.appendChild(newChromaButton);//On l'ajoute dans le div global
-
+    if (this.nameSlider !== "red" && this.nameSlider !== "green" && this.nameSlider !== "blue") {
+      newSliderZone.appendChild(this.getChromaButton);//On l'ajoute dans le div global
+    }
     //On applique le nouveau slider avant l'élèment indiqué dans le constructeur
     this.parent.insertBefore(newSliderZone, this.previousDiv);
-
-    return newChromaButton;
   }
 
   /**
@@ -133,5 +135,14 @@ class slider {
    */
   get jqueryId() {
     return $("#"+this.nameSlider+"");
+  }
+
+  get getChromaButton() {
+    var newChromaButton = document.createElement('button');
+    newChromaButton.title = "Color Management";
+    newChromaButton.id = this.nameSlider + "Chroma";
+    newChromaButton.className = "chromaButton";
+    newChromaButton.innerHTML = "C";
+    return newChromaButton;
   }
 }
