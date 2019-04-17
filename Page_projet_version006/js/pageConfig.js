@@ -30,13 +30,15 @@ var slider1 = new slider("1", "Fd1.V", 0, parentFader, firstChild);
 slider1.createSlider();
 var slider2 = new slider("2", "Fd2.V", 0, parentFader, firstChild);
 slider2.createSlider();
+var sliderProjo = new slider("projo", "Prj.V", 0, parentFader, firstChild);
+sliderProjo.createSlider();
 
 var parentColor = document.getElementById("colorSpace");
 var secondChild = parentColor.firstChild;
 
-var sliderRed = new slider("red", "Red.V", 128, parentColor, secondChild);
+var sliderRed = new slider("red", "Red.V", 255, parentColor, secondChild);
 sliderRed.createSlider();
-var sliderGreen =  new slider("green", "Gre.V", 10, parentColor, secondChild);
+var sliderGreen =  new slider("green", "Gre.V", 255, parentColor, secondChild);
 sliderGreen.createSlider();
 var sliderBlue = new slider("blue", "Blu.V", 255, parentColor, secondChild);
 sliderBlue.createSlider();

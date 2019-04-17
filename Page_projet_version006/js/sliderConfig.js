@@ -65,6 +65,7 @@ class slider {
       else {
         document.getElementById(nameValue).innerHTML = nValue;
         $("#"+nameSlider+"").slider("value", nValueBinary);
+        sendMessage("01." + idMessage+":"+ nValueBinary, "general");
       }
 
       console.log("The color value of " + this.id + " has been changed for : " + nValue.toString());

@@ -1,6 +1,11 @@
 /***********************/
 /*Propriétés de la page*/
 /***********************/
+@font-face {
+  font-family: neon;
+  src: url(fonts/neon.ttf);
+}
+
 .ui-widget-content {
   background-color: #282923;
 }
@@ -8,12 +13,33 @@ p {
   font-size: 12px;
 }
 #title {
+  /*font-size: 50px;
+  text-align: center;
+  text-shadow: 0 0 10px #00FFFF;
+  font-family: neon;
+  color: #00FFFF;*/
+  font-family: neon;
+  color: #00FFFF;
   font-size: 50px;
   text-align: center;
   text-shadow: 0 0 10px #00FFFF;
-  font-family: "Brush Script MT", "Brush Script Std", cursive;
-  color: #00FFFF;
+  animation: flux 20s ease infinite;
+  -moz-animation: flux 20s ease infinite;
+  -webkit-animation: flux 20s ease infinite;
 }
+
+@keyframes flux {
+  0%,
+  100% {
+    text-shadow: 0 0 1vw #1041FF, 0 0 3vw #1041FF, 0 0 10vw #1041FF, 0 0 10vw #1041FF, 0 0 .4vw #8BFDFE, .5vw .5vw .1vw #147280;
+    color: #00FFFF;
+  }
+  50% {
+    text-shadow: 0 0 .5vw #082180, 0 0 1.5vw #082180, 0 0 5vw #082180, 0 0 5vw #082180, 0 0 .2vw #082180, .5vw .5vw .1vw #0A3940;
+    color: #00FFFF;
+  }
+}
+
 
 .header{
   font-style: italic;
