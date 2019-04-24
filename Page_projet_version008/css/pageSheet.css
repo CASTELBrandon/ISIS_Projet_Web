@@ -22,14 +22,13 @@ p {
   color: #00FFFF;
   font-size: 50px;
   text-align: center;
-  text-shadow: 0 0 5px #00FFFF;
-}
-/*  animation: flux 20s ease infinite;
+  text-shadow: 0 0 10px #00FFFF;
+  /*animation: flux 20s ease infinite;
   -moz-animation: flux 20s ease infinite;
-  -webkit-animation: flux 20s ease infinite;
+  -webkit-animation: flux 20s ease infinite;*/
 }
 
-@keyframes flux {
+/*@keyframes flux {
   0%,
   100% {
     text-shadow: 0 0 1vw #1041FF, 0 0 3vw #1041FF, 0 0 10vw #1041FF, 0 0 10vw #1041FF, 0 0 .4vw #8BFDFE, .5vw .5vw .1vw #147280;
@@ -39,8 +38,8 @@ p {
     text-shadow: 0 0 .5vw #082180, 0 0 1.5vw #082180, 0 0 5vw #082180, 0 0 5vw #082180, 0 0 .2vw #082180, .5vw .5vw .1vw #0A3940;
     color: #00FFFF;
   }
-}
-*/
+}*/
+
 
 .header{
   font-style: italic;
@@ -191,6 +190,22 @@ p {
   border-radius: 50%;
   border-color: #00FFFF;
   margin: auto;
+}
+
+#swatchZone {
+  width: 100px;
+  height: 100px;
+  background-image: none;
+  border-radius: 50%;
+  border-color: #00FFFF;
+  margin: auto;
+}
+
+#buttonClose {
+  background-color: #282923;
+  color: #bfbfbf;
+  border-radius: 12px;
+  border-color: #585858;
 }
 
 .space {

@@ -2,18 +2,23 @@
  * Cette page gère les fonctions des sliders sous forme d'objet
  *
  * CASTEL Brandon
- * 24-04-19
+ * 12-04-19
  */
 
 class slider {
 
-  constructor (nameSlider, idMessage, valueSlider, parentDiv, previousDiv) {
+  constructor (nameSlider, idMessage, valueSlider, parentDiv, previousDiv, chromaAccess) {
     this.nameSlider  = nameSlider;
     this.valueSlider = valueSlider;
     this.previousDiv = previousDiv;
     this.nameValueSlider = nameSlider + "Value";
     this.idMessage = idMessage;
     this.parent = parentDiv;
+    this.chromaAccess = chromaAccess;
+    this.access = false;
+    this.redColor = 0;
+    this.blueColor = 0;
+    this.greenColor = 0;
   }
 
   /**
@@ -23,6 +28,11 @@ class slider {
     var nameValue = this.nameValueSlider;
     var nameSlider = this.nameSlider;
     var idMessage = this.idMessage;
+    var access = this.access;
+    var chromaButtonId = this.nameSlider+"Chroma";
+
+    //On lance les commandes html
+    this.htmlConfigSlider();
 
     //On initialise le slider
     this.jqueryId.slider({
@@ -40,10 +50,12 @@ class slider {
     /*******Evènements*******/
 
     //Changement des valeurs et envoi des messages quand on agit sur le slider
-    this.jqueryId.on("slide", function(event, ui){
-      document.getElementById(nameValue).innerHTML = pourcentConversion(ui.value);
-      sendMessage("01."+idMessage+":" + ui.value.toString(), "general");
-    });
+    if(this.nameSlider !== "red" && this.nameSlider !== "blue" && this.nameSlider !== "green") {
+      this.jqueryId.on("slide", function(event, ui){
+        document.getElementById(nameValue).innerHTML = pourcentConversion(ui.value);
+        sendMessage("01."+idMessage+":" + ui.value.toString(), "general");
+      });
+    }
 
     //Demande d'insérer une valeur lorsque l'on clique sur l'afficheur
     document.getElementById(nameValue).addEventListener("click" , function() {
@@ -62,8 +74,26 @@ class slider {
         sendMessage("01." + idMessage+":"+ nValueBinary, "general");
       }
 
-      console.log("The value of " + this.id + " has been changed for : " + nValue.toString());
+      console.log("The color value of " + this.id + " has been changed for : " + nValue.toString());
     });
+
+    //On crée l'évènement d'affichage de la zone RVB lorsqu'on clique sur les boutons "C"
+
+    var blueV = this.blueColor;
+    var greenV = this.greenColor;
+    var redV = this.redColor;
+    if (this.chromaAccess == true) {
+
+      document.getElementById(chromaButtonId).addEventListener("click", function() {
+          $("#colorSpace").show(1000);
+          console.log(redV);
+
+          sliderRed.setValueSlider(redV, pourcentConversion(redV));
+          sliderBlue.setValueSlider(blue, pourcentConversion(blue));
+          sliderGreen.setValueSlider(green, pourcentConversion(green));
+
+      });
+    }
   }
 
   /**
@@ -92,6 +122,13 @@ class slider {
     newSlider.id = this.nameSlider;
     newSlider.className = "slider";
     newSliderZone.appendChild(newSlider);//On l'ajoute dans le div global
+
+    //On crée un bouton de chromaticité
+    if (this.chromaAccess == true) {
+      newSliderZone.appendChild(this.getChromaButton);//On l'ajoute dans le div global
+    }
+    //On applique le nouveau slider avant l'élèment indiqué dans le constructeur
+    this.parent.insertBefore(newSliderZone, this.previousDiv);
   }
 
   /**
@@ -111,48 +148,6 @@ class slider {
   get jqueryId() {
     return $("#"+this.nameSlider+"");
   }
-}
-
-class generalSlider extends slider {
-
-  constructor(nameSlider, idMessage, valueSlider, parentDiv, previousDiv) {
-    super(nameSlider, valueSlider, previousDiv, idMessage, parent);
-    this.access = false;
-  }
-
-  createSlider() {
-    var chromaButtonId = this.getChromaButton.id;
-    var access = this.access;
-    super.createSlider();
-
-    //On lance les commandes html
-    this.htmlConfigSlider();
-
-    //On crée l'évènement d'affichage de la zone RVB lorsqu'on clique sur les boutons "C"
-    document.getElementById(chromaButtonId).addEventListener("click", function() {
-      if (access == false) {
-        $("#colorSpace").show(1000);
-        access = true;
-      } else if (access == true) {
-        $("#colorSpace").hide(1000);
-        access = false;
-      }
-    });
-  }
-
-  /**
-   * Cette fonction initialise le slider en appliquant les nouveaux éléments HTML
-   */
-  htmlConfigSlider () {
-    super.htmlConfigSlider();
-
-    //On crée un bouton de chromaticité
-    if (this.nameSlider !== "red" && this.nameSlider !== "green" && this.nameSlider !== "blue") {
-      newSliderZone.appendChild(this.getChromaButton);//On l'ajoute dans le div global
-    }
-    //On applique le nouveau slider avant l'élèment indiqué dans le constructeur
-    this.parent.insertBefore(newSliderZone, this.previousDiv);
-  }
 
   get getChromaButton() {
     var newChromaButton = document.createElement('button');
@@ -162,27 +157,11 @@ class generalSlider extends slider {
     newChromaButton.innerHTML = "C";
     return newChromaButton;
   }
-}
 
-class colorSlider extends slider {
-  constructor(nameSlider, idMessage, valueSlider, parentDiv, previousDiv) {
-      super(nameSlider);
-      super(valueSlider);
-      super(previousDiv);
-      super(nameValueSlider);
-      super(idMessage);
-      super(parent);
+  getRed() {
+    return this.red;
   }
-
-  createSlider() {
-    super.createSlider();
-    //On lance les commandes html
-    this.htmlConfigSlider();
-  }
-
-  htmlConfigSlider() {
-    super.htmlConfigSlider();
-    //On applique le nouveau slider avant l'élèment indiqué dans le constructeur
-    this.parent.insertBefore(newSliderZone, this.previousDiv);
+  setRed(newValue) {
+    this.red = newValue;
   }
 }

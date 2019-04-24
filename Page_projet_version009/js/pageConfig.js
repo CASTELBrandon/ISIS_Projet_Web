@@ -2,7 +2,7 @@
   Ce code source permet de gérer les animations et la gestion
   de la page web.
 
-  24-04-19
+  12-04-19
   CASTEL Brandon
 */
 
@@ -21,32 +21,37 @@ var buttonConnect = document.getElementById("buttonConnect");
 var flag_buttonArrow=false;
 
 //On crée de nouveau slider
+var parentColor = document.getElementById("colorSpace");
+var secondChild = parentColor.firstChild;
+
+var sliderRed = new slider("red", "Red.V", 255, parentColor, secondChild);
+sliderRed.createSlider();
+var sliderGreen =  new slider("green", "Gre.V", 255, parentColor, secondChild);
+sliderGreen.createSlider();
+var sliderBlue = new slider("blue", "Blu.V", 255, parentColor, secondChild);
+sliderBlue.createSlider();
+
 var parentFader = document.getElementById("faderSpace");
 var firstChild = parentFader.firstChild;
 
-var sliderMaster = new generalSlider("master", "Mtr.V", 0, parentFader, firstChild);
-sliderMaster.createSlider();
-var slider1 = new generalSlider("1", "Fd1.V", 0, parentFader, firstChild);
+
+var slider1 = new slider("1", "Fd1.V", 0, parentFader, firstChild, false);
 slider1.createSlider();
-var slider2 = new generalSlider("2", "Fd2.V", 0, parentFader, firstChild);
+var slider2 = new slider("2", "Fd2.V", 0, parentFader, firstChild, true);
 slider2.createSlider();
-var sliderProjo = new generalSlider("projo", "Prj.V", 0, parentFader, firstChild);
+var sliderProjo = new slider("projo", "Prj.V", 0, parentFader, firstChild, true);
 sliderProjo.createSlider();
 newSlider("4", "Fd4.V", 0);
 newSlider("5", "Fd5.V", 0);
 newSlider("6", "Fd6.V", 0);
 newSlider("7", "Fd7.V", 0);
+newSlider("8", "Fd8.V", 0);
+var sliderMaster = new slider("master", "Mtr.V", 0, parentFader, firstChild);
+sliderMaster.createSlider();
 
 
-var parentColor = document.getElementById("colorSpace");
-var secondChild = parentColor.firstChild;
 
-var sliderRed = new colorSlider("red", "Red.V", 255, parentColor, secondChild);
-sliderRed.createSlider();
-var sliderGreen =  new colorSlider("green", "Gre.V", 255, parentColor, secondChild);
-sliderGreen.createSlider();
-var sliderBlue = new colorSlider("blue", "Blu.V", 255, parentColor, secondChild);
-sliderBlue.createSlider();
+
 
 
 
@@ -149,6 +154,7 @@ function colorPickerDisplay () {
     });*/
   }
 }
+
 
 /****************Fonctions des sliders*******************/
 /**
@@ -276,6 +282,11 @@ function permission (access) {
 
   //>>Évènement du "swatch"
   document.getElementById("swatch").addEventListener('click', colorPickerDisplay);
+
+  //>>Evènement du bouton Close
+  document.getElementById("buttonClose").addEventListener('click', function() {
+    $("#colorSpace").hide(1000);
+  });
 
   //>>Evènement des boutons de connexion
   document.getElementById("buttonConnect").addEventListener("click", buttonConnectTrigger);
