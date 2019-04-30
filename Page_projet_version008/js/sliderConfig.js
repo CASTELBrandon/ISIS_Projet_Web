@@ -16,9 +16,6 @@ class slider {
     this.parent = parentDiv;
     this.chromaAccess = chromaAccess;
     this.access = false;
-    this.redColor = 0;
-    this.blueColor = 0;
-    this.greenColor = 0;
   }
 
   /**

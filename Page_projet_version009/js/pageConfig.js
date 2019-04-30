@@ -2,7 +2,7 @@
   Ce code source permet de gérer les animations et la gestion
   de la page web.
 
-  12-04-19
+  30-04-19
   CASTEL Brandon
 */
 
@@ -25,29 +25,38 @@ var parentColor = document.getElementById("colorSpace");
 var secondChild = parentColor.firstChild;
 
 var sliderRed = new slider("red", "Red.V", 255, parentColor, secondChild);
-sliderRed.createSlider();
 var sliderGreen =  new slider("green", "Gre.V", 255, parentColor, secondChild);
-sliderGreen.createSlider();
 var sliderBlue = new slider("blue", "Blu.V", 255, parentColor, secondChild);
-sliderBlue.createSlider();
 
 var parentFader = document.getElementById("faderSpace");
 var firstChild = parentFader.firstChild;
 
+var buttonArrowLeft = document.createElement('button');
+buttonArrowLeft.id = "buttonArrowLeft";
+buttonArrowLeft.innerHTML = "<";
+parentFader.insertBefore(buttonArrowLeft, firstChild);
 
-var slider1 = new slider("1", "Fd1.V", 0, parentFader, firstChild, false);
-slider1.createSlider();
-var slider2 = new slider("2", "Fd2.V", 0, parentFader, firstChild, true);
-slider2.createSlider();
-var sliderProjo = new slider("projo", "Prj.V", 0, parentFader, firstChild, true);
-sliderProjo.createSlider();
-newSlider("4", "Fd4.V", 0);
-newSlider("5", "Fd5.V", 0);
-newSlider("6", "Fd6.V", 0);
-newSlider("7", "Fd7.V", 0);
-newSlider("8", "Fd8.V", 0);
+/*
+  On crée nos nouveaux slider dans un tableau de slider, et la variable d'incrémentation
+  pour pouvoir lire le tableau.
+*/
+var iterator = 8;
+var sliderArray = new Array();
+for(i=1; i < 65 ; i++) {
+  sliderArray[i] = new slider(i.toString(), "Fd"+i+".V", 0, parentFader, firstChild, true);
+  if (i > 8) {
+    $("#"+sliderArray[i].nameSlider+"Zone").hide(1);
+  }
+}
+
+
+var buttonArrowRight = document.createElement('button');
+buttonArrowRight.id = "buttonArrowRight";
+buttonArrowRight.innerHTML = ">";
+parentFader.insertBefore(buttonArrowRight, firstChild);
+
+
 var sliderMaster = new slider("master", "Mtr.V", 0, parentFader, firstChild);
-sliderMaster.createSlider();
 
 
 
@@ -162,13 +171,42 @@ function colorPickerDisplay () {
  * @param  {[text]} name  [Nom du slider]
  * @param  {[text]} id    [Id à l'envoi d'une valeur]
  * @param  {[binaryValue]} value [Valeur à initiliser]
+ * @param  {[boolean]} chroma [Accès ou non aux fonctions RGB]
  * @return [On retourne le slider]
  */
-function newSlider(name, id, value) {
-  var nslider = new slider(name, id, value, parentFader, firstChild);
-  nslider.createSlider();
+function newSlider(name, id, value, chroma) {
+  var nslider = new slider(name, id, value, parentFader, firstChild, chroma);
   return nslider;
 }
+
+function buttonArrowRightTrigger() {
+  var j = iterator-7;
+  for(j; j < iterator+1 && j+8 < 65 ; j++) {
+    $("#"+sliderArray[j].nameSlider+"Zone").hide(1);
+    $("#"+sliderArray[j+8].nameSlider+"Zone").show(1);
+    console.log("j :" + j);
+  }
+  console.log("iterator avant : " + iterator);
+  if (iterator < 64) {
+    iterator = iterator + 8;
+  }
+  console.log("iterator après : " + iterator);
+}
+
+function buttonArrowLeftTrigger() {
+  var j = iterator;
+  for(j; j > iterator-8 && j-8 > 0 ; j--) {
+    $("#"+sliderArray[j].nameSlider+"Zone").hide(1);
+    $("#"+sliderArray[j-8].nameSlider+"Zone").show(1);
+    console.log("j :" + j);
+  }
+  console.log("iterator avant : " + iterator);
+  if (iterator > 8) {
+    iterator = iterator - 8;
+  }
+  console.log("iterator après : " + iterator);
+}
+
 
 /****************Fonctions du bouton de connexion****************/
 function buttonConnectStyle(message, color) {
@@ -237,12 +275,6 @@ function permission (access) {
 /******************************************
             Les évènements
 ******************************************/
-
-/***************Évènement sur support tactile*****************/
-  //>>Évènement des curseurs de couleur
-
-
-/***************Évènement sur support cliquable***************/
   /*
     On récupère la valeur du color picker grâce à un callback de farbtastic.
     On change ensuite l'afficheur par la couleur sélectionnée.
@@ -293,3 +325,7 @@ function permission (access) {
   document.getElementById("buttonConnect").addEventListener("touch", buttonConnectTrigger);
   document.getElementById("buttonArrow").addEventListener("click", buttonArrowOpen);
   document.getElementById("buttonArrow").addEventListener("touch", buttonArrowOpen);
+
+  //>>Evènement des flèches de défilement des sliderSheet
+  document.getElementById("buttonArrowRight").addEventListener("click", buttonArrowRightTrigger);
+  document.getElementById("buttonArrowLeft").addEventListener("click", buttonArrowLeftTrigger);
