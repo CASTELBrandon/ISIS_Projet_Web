@@ -1,0 +1,18 @@
+Décomposition de l'identification:
+
+Exemple:
+"00.Clr.R: 255"
+
+9 caractères pour l'identification
+
+1 - Deux premier chiffre : Numéro du client
+(00 réservé au système)
+
+2 - Trois lettres : identification de la fonction à utiliser.
+(exemple: color -> clr)
+
+3 - Une lettre : Nom de la couleur
+(exemple: rouge -> R)
+
+4 - La valeur
+

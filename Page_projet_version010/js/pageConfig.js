@@ -21,8 +21,6 @@ var buttonConnect = document.getElementById("buttonConnect");
 var flag_buttonArrow=false;
 
 //On crée de nouveau slider
-
-
 var parentFader = document.getElementById("faderSpace");
 var firstChild = parentFader.firstChild;
 
@@ -32,14 +30,74 @@ buttonArrowLeft.innerHTML = "<";
 parentFader.insertBefore(buttonArrowLeft, firstChild);
 
 /*
-  On crée nos nouveaux slider dans un tableau de slider, et la variable d'incrémentation
+  On crée nos nouveaux slider et leurs paramètres dans un tableau de slider, et la variable d'incrémentation
   pour pouvoir lire le tableau.
 */
 var iterator = 8;
 var nbSlider = 512;
 var sliderArray = new Array();
 for(i=1; i < nbSlider+1 ; i++) {
-  sliderArray[i] = new slider(i.toString(), "Fd"+i+".V", 0, parentFader, firstChild, true);
+  sliderArray[i] = slider;
+  sliderArray[i].nameSlider = i.toString();
+  sliderArray[i].idMessage = "Fd"+i+".V";
+  sliderArray[i].valueSlider = 0;
+  sliderArray[i].parent = parentFader;
+  sliderArray[i].previousDiv = firstChild;
+  sliderArray[i].chromaAccess = true;
+  sliderArray[i].redColor= 0;
+  sliderArray[i].blueColor= 0;
+  sliderArray[i].greenColor= 0;
+
+  sliderArray[i].htmlFunction();
+
+  //On initialise le slider
+  sliderArray[i].jqueryId().slider({
+    orientation: "vertical",
+    range: "min",
+    max: 255,
+    value: sliderArray[i].valueSlider,
+    slide: refreshSwatch,
+    change: refreshSwatch
+  });
+
+  //On lui applique une valeur d'Initialisation
+  sliderArray[i].setValueSlider(sliderArray[i].valueSlider,pourcentConversion(sliderArray[i].valueSlider));
+
+
+  /*******Evènements*******/
+
+  //Changement des valeurs et envoi des messages quand on agit sur le slider
+  if(sliderArray[i].nameSlider !== "red" && sliderArray[i].nameSlider !== "blue" && sliderArray[i].nameSlider !== "green") {
+    sliderArray[i].jqueryId().on("slide", function(event, ui){
+      document.getElementById(sliderArray[i].nameSlider+"Value").innerHTML = pourcentConversion(ui.value);
+      sendMessage("01."+sliderArray[i].idMessage+":" + ui.value.toString(), "general");
+    });
+  }
+
+  //Demande d'insérer une valeur lorsque l'on clique sur l'afficheur
+  document.getElementById(sliderArray[i].nameSlider+"Value").addEventListener("click" , function() {
+
+    //On demande à choisir une valeur en pourcentage entre 0 et 100
+    var nValue = Number(prompt("New value ?"));
+    //On la convertie en binaire
+    var nValueBinary = binaryLevelConversion(nValue);
+
+    if (nValue > 100 || nValue < 0) {
+      alert("Veuillez donner une valeur comprise entre 0 et 100%.")
+    }
+    else {
+      document.getElementById(sliderArray[i].nameSlider+"Value").innerHTML = nValue;
+      $("#"+sliderArray[i].nameSlider+"").slider("value", nValueBinary);
+      sendMessage("01." + sliderArray[i].idMessage+":"+ nValueBinary, "general");
+    }
+
+    console.log("The color value of " + this.id + " has been changed for : " + nValue.toString());
+  });
+
+  //Changement de nom au click
+  document.getElementById(sliderArray[i].nameSlider+"Name").addEventListener("click", sliderArray[i].changeName.bind(sliderArray[i].nameSlider+"Name"));
+
+  //On cache les slider au délà de 8
   if (i > 8) {
     $("#"+sliderArray[i].nameSlider+"Zone").hide(1);
   }
@@ -51,9 +109,98 @@ buttonArrowRight.innerHTML = ">";
 parentFader.insertBefore(buttonArrowRight, firstChild);
 
 
-var sliderMaster = new slider("master", "Mtr.V", 0, parentFader, firstChild);
+var sliderMaster = slider;
+sliderMaster.nameSlider = "Master";
+sliderMaster.idMessage = "Mtr.V";
+sliderMaster.valueSlider = 0;
+sliderMaster.parent = parentFader;
+sliderMaster.previousDiv = firstChild;
+sliderMaster.chromaAccess = false;
+sliderMaster.htmlFunction();
+
+//On initialise le slider
+sliderMaster.jqueryId().slider({
+  orientation: "vertical",
+  range: "min",
+  max: 255,
+  value: sliderMaster.valueSlider,
+  slide: refreshSwatch,
+  change: refreshSwatch
+});
+
+//On lui applique une valeur d'Initialisation
+sliderMaster.setValueSlider(sliderMaster.valueSlider,pourcentConversion(sliderMaster.valueSlider));
 
 
+/*******Evènements*******/
+
+//Changement des valeurs et envoi des messages quand on agit sur le slider
+if(sliderMaster.nameSlider !== "red" && sliderMaster.nameSlider !== "blue" && sliderMaster.nameSlider !== "green") {
+  sliderMaster.jqueryId().on("slide", function(event, ui){
+    document.getElementById(sliderMaster.nameSlider+"Value").innerHTML = pourcentConversion(ui.value);
+    sendMessage("01."+sliderMaster.idMessage+":" + ui.value.toString(), "general");
+  });
+}
+
+//Demande d'insérer une valeur lorsque l'on clique sur l'afficheur
+document.getElementById(sliderMaster.nameSlider+"Value").addEventListener("click" , function() {
+
+  //On demande à choisir une valeur en pourcentage entre 0 et 100
+  var nValue = Number(prompt("New value ?"));
+  //On la convertie en binaire
+  var nValueBinary = binaryLevelConversion(nValue);
+
+  if (nValue > 100 || nValue < 0) {
+    alert("Veuillez donner une valeur comprise entre 0 et 100%.")
+  }
+  else {
+    document.getElementById(sliderMaster.nameSlider+"Value").innerHTML = nValue;
+    $("#"+sliderMaster.nameSlider+"").slider("value", nValueBinary);
+    sendMessage("01." + sliderMaster.idMessage+":"+ nValueBinary, "general");
+  }
+
+  console.log("The color value of " + this.id + " has been changed for : " + nValue.toString());
+});
+
+
+//On crée l'évènement d'affichage de la zone RVB lorsqu'on clique sur les boutons "C"
+for(i=1; i < nbSlider+1; i++) {
+  if (sliderMaster.chromaAccess == true) {
+
+    sliderMaster.sliderRed =  new slider("red", "Red.V", 255, parentColor, secondChild);
+    sliderMaster.sliderGreen = new slider("green", "Gre.V", 255, parentColor, secondChild);
+    sliderMaster.sliderBlue = new slider("blue", "Blu.V", 255, parentColor, secondChild);
+
+    console.log("this.redColor :" + this.redColor);
+    $("#"+this.nameSlider+"Chroma").on("click", function() {
+      $("#colorSpace").show(1000);
+      console.log("redV :"+this.redColor);
+
+      this.sliderRed.setValueSlider(this.redColor, pourcentConversion(this.redColor));
+      this.sliderBlue.setValueSlider(this.blueColor, pourcentConversion(this.blueColor));
+      this.sliderGreen.setValueSlider(this.greenColor, pourcentConversion(this.greenColor));
+    });
+
+    $("#red").on("slide", function(event, ui){
+      document.getElementById("redValue").innerHTML = pourcentConversion(ui.value);
+      sendMessage("01.Red.V:" + ui.value.toString(), "general");
+      this.redColor = ui.value;
+      console.log("this.redColor :"+this.redColor);
+    });
+
+    $("#blue").on("slide", function(event, ui){
+      document.getElementById("blueValue").innerHTML = pourcentConversion(ui.value);
+      sendMessage("01.Blu.V:" + ui.value.toString(), "general");
+      this.blueColor = ui.value;
+    });
+
+    $("#green").on("slide", function(event, ui){
+      document.getElementById("greenValue").innerHTML = pourcentConversion(ui.value);
+      sendMessage("01.Gre.V:" + ui.value.toString(), "general");
+      this.greenColor = ui.value;
+    });
+  }
+}
 
 
 

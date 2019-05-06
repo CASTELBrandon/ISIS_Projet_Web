@@ -5,6 +5,9 @@
  * 30-04-19
  */
 
+ var parentColor = document.getElementById("colorSpace");
+ var secondChild = parentColor.firstChild;
+
 function slider (nameSlider, idMessage, valueSlider, parentDiv, previousDiv, chromaAccess) {
     this.nameSlider  = nameSlider;
     this.valueSlider = valueSlider;
@@ -13,9 +16,10 @@ function slider (nameSlider, idMessage, valueSlider, parentDiv, previousDiv, chr
     this.idMessage = idMessage;
     this.parent = parentDiv;
     this.chromaAccess = chromaAccess;
-    this.redColor = 0;
-    this.blueColor = 0;
-    this.greenColor = 0;
+    redColor = 0;
+    blueColor = 0;
+    greenColor = 0;
+
 
     /**
      * Cette fonction change la valeur du slider et de son afficheur.
@@ -44,15 +48,15 @@ function slider (nameSlider, idMessage, valueSlider, parentDiv, previousDiv, chr
       return newChromaButton;
     }
 
-    this.setColor = function(redV, greenV, blueV) {
-      $("#colorSpace").show(1000);
-      console.log("redV :"+this.redColor);
-
-      sliderRed.setValueSlider(redV, pourcentConversion(redV));
-      sliderBlue.setValueSlider(blueV, pourcentConversion(blueV));
-      sliderGreen.setValueSlider(greenV, pourcentConversion(greenV));
+    this.changeName = function(name) {
+      let newName;
+      newName = prompt("New name ?");
+      if (newName === "" || newName === " "){
+        alert("Veuillez donner un nom complet.");
+      } else {
+        document.getElementById(name).innerHTML = newName;
+      }
     }
-
 
     /**
      * Cette fonction initialise le slider en appliquant les nouveaux éléments HTML
@@ -65,6 +69,7 @@ function slider (nameSlider, idMessage, valueSlider, parentDiv, previousDiv, chr
       //On crée le nom du nouveau slider
       var newP = document.createElement('p');
       newP.className = "colorText";
+      newP.id = this.nameSlider+"Name";
       newP.appendChild(document.createTextNode(this.nameSlider));
       newSliderZone.appendChild(newP);//On l'ajoute dans le div global
 
@@ -140,10 +145,26 @@ function slider (nameSlider, idMessage, valueSlider, parentDiv, previousDiv, chr
       console.log("The color value of " + this.id + " has been changed for : " + nValue.toString());
     });
 
+    //Changement de nom au click
+
+    document.getElementById(this.nameSlider+"Name").addEventListener("click", this.changeName.bind(this.nameSlider+"Name"));
+
   //On crée l'évènement d'affichage de la zone RVB lorsqu'on clique sur les boutons "C"
   if (this.chromaAccess == true) {
+
+    this.sliderRed = new slider("red", "Red.V", 255, parentColor, secondChild);
+    this.sliderGreen =  new slider("green", "Gre.V", 255, parentColor, secondChild);
+    this.sliderBlue = new slider("blue", "Blu.V", 255, parentColor, secondChild);
+
     console.log("this.redColor :" + this.redColor);
-    document.getElementById(this.nameSlider+"Chroma").addEventListener("click", this.setColor.bind(this.redColor, this.greenColor, this.blueColor));
+    $("#"+this.nameSlider+"Chroma").on("click", function() {
+      $("#colorSpace").show(1000);
+      console.log("redV :"+this.redColor);
+
+      this.sliderRed.setValueSlider(redV, pourcentConversion(redV));
+      this.sliderBlue.setValueSlider(blueV, pourcentConversion(blueV));
+      this.sliderGreen.setValueSlider(greenV, pourcentConversion(greenV));
+    });
 
     $("#red").on("slide", function(event, ui){
       document.getElementById("redValue").innerHTML = pourcentConversion(ui.value);

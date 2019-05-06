@@ -17,15 +17,20 @@ $(".ui-slider-handle").draggable();
 //On recupère l'Id du bouton de connexion
 var buttonConnect = document.getElementById("buttonConnect");
 
+//On crée un variable pour appeller le slider appeleur du colorSpace
+var caller;
+
 //Flag
 var flag_buttonArrow=false;
 
 //On crée de nouveau slider
-
-
 var parentFader = document.getElementById("faderSpace");
 var firstChild = parentFader.firstChild;
 
+var parentColor = document.getElementById("colorSpace");
+var secondChild = parentColor.firstChild;
+
+//Flèches de sélections
 var buttonArrowLeft = document.createElement('button');
 buttonArrowLeft.id = "buttonArrowLeft";
 buttonArrowLeft.innerHTML = "<";
@@ -36,10 +41,10 @@ parentFader.insertBefore(buttonArrowLeft, firstChild);
   pour pouvoir lire le tableau.
 */
 var iterator = 8;
-var nbSlider = 512;
+var nbSlider = 64;
 var sliderArray = new Array();
 for(i=1; i < nbSlider+1 ; i++) {
-  sliderArray[i] = new slider(i.toString(), "Fd"+i+".V", 0, parentFader, firstChild, true);
+  sliderArray[i] = newSlider(i.toString(), "Fd"+i+".V", 0, parentFader, firstChild, true);
   if (i > 8) {
     $("#"+sliderArray[i].nameSlider+"Zone").hide(1);
   }
@@ -51,7 +56,11 @@ buttonArrowRight.innerHTML = ">";
 parentFader.insertBefore(buttonArrowRight, firstChild);
 
 
-var sliderMaster = new slider("master", "Mtr.V", 0, parentFader, firstChild);
+var sliderMaster = newSlider("master", "Mtr.V", 0, parentFader, firstChild);
+
+var sliderRed =  newSlider("red", "Red.V", 255, parentColor, secondChild);
+var sliderGreen =  newSlider("green", "Gre.V", 255, parentColor, secondChild);
+var sliderBlue = newSlider("blue", "Blu.V", 255, parentColor, secondChild);
 
 
 
@@ -75,7 +84,6 @@ $("#faderSpace").hide();
 $(document).ready(function() {
     $('#colorPicker').farbtastic('#color');
 });
-
 
 /******************************************
               Les fonctions
@@ -167,11 +175,117 @@ function colorPickerDisplay () {
  * @param  {[text]} id    [Id à l'envoi d'une valeur]
  * @param  {[binaryValue]} value [Valeur à initiliser]
  * @param  {[boolean]} chroma [Accès ou non aux fonctions RGB]
- * @return [On retourne le slider]
+ * @return [La fonction crée le slider avec tous les paramètres nécessaires.]
  */
-function newSlider(name, id, value, chroma) {
-  var nslider = new slider(name, id, value, parentFader, firstChild, chroma);
+function newSlider(name, id, value, parent, child, chroma) {
+  var nslider = new slider(name, id, value, parent, child, chroma);
+  nslider.create();
+
+  //On initialise le slider
+  nslider.jqueryId().slider({
+    orientation: "vertical",
+    range: "min",
+    max: 255,
+    value: nslider.valueSlider,
+    slide: refreshSwatch,
+    change: refreshSwatch
+  });
+
+  //On lui applique une valeur d'Initialisation
+  nslider.setValueSlider(nslider.valueSlider,pourcentConversion(nslider.valueSlider));
+
+  //Changement des valeurs et envoi des messages quand on agit sur le slider
+  if(nslider.nameSlider !== "red" && nslider.nameSlider !== "blue" && nslider.nameSlider !== "green") {
+    nslider.jqueryId().on("slide", function(event, ui){
+      document.getElementById(nslider.nameValueSlider).innerHTML = pourcentConversion(ui.value);
+      sendMessage("01."+nslider.idMessage+":" + ui.value.toString(), "general");
+    });
+  }
+
+  //Demande d'insérer une valeur lorsque l'on clique sur l'afficheur
+  document.getElementById(nslider.nameValueSlider).addEventListener("click" , function() {
+
+    //On demande à choisir une valeur en pourcentage entre 0 et 100
+    var nValue = Number(prompt("New value ?"));
+    //On la convertie en binaire
+    var nValueBinary = binaryLevelConversion(nValue);
+
+    if (nValue > 100 || nValue < 0) {
+      alert("Veuillez donner une valeur comprise entre 0 et 100%.")
+    }
+    else {
+      document.getElementById(nslider.nameValueSlider).innerHTML = nValue;
+      $("#"+nslider.nameSlider+"").slider("value", nValueBinary);
+      sendMessage("01." + nslider.idMessage+":"+ nValueBinary, "general");
+    }
+
+    console.log("The color value of " + nslider.id + " has been changed for : " + nValue.toString());
+  });
+
+  //Changement de nom au click
+  document.getElementById(nslider.nameId).addEventListener("click", nslider.changeName.bind(nslider.nameId));//bind donne toutes les infos, ils faut les sélectionnés avec target
+
+  //Evènement de slide des fader RGB
+  if(nslider.nameSlider === "red" || nslider.nameSlider === "blue" || nslider.nameSlider === "green") {
+    //On intègre une variable d'appeleur du slider
+    nslider.caller;
+
+    $("#red").on("slide", function(event, ui){
+      document.getElementById("redValue").innerHTML = pourcentConversion(ui.value);
+      sendMessage("01.Red.V:" + ui.value.toString(), "general");
+      nslider.caller.redColor = ui.value;
+      console.log("nslider.redColor :"+nslider.redColor);
+    });
+
+    $("#blue").on("slide", function(event, ui){
+      document.getElementById("blueValue").innerHTML = pourcentConversion(ui.value);
+      sendMessage("01.Blu.V:" + ui.value.toString(), "general");
+      nslider.caller.blueColor = ui.value;
+    });
+
+    $("#green").on("slide", function(event, ui){
+      document.getElementById("greenValue").innerHTML = pourcentConversion(ui.value);
+      sendMessage("01.Gre.V:" + ui.value.toString(), "general");
+      nslider.caller.greenColor = ui.value;
+    });
+  }
+
+  //On crée l'évènement d'affichage de la zone RVB lorsqu'on clique sur les boutons "C"
+  if (nslider.chromaAccess == true) {
+    $("#"+nslider.nameSlider+"Chroma").on("click", function() {
+      document.getElementById("TitreOptionZone").innerHTML = nslider.nameSlider;
+
+      //On rafraichit l'appeleur
+      caller = nslider;
+
+      //On rafraichit les valeurs de l'appeleur dans les slider RGB
+      sliderRed.caller = nslider;
+      sliderBlue.caller = nslider;
+      sliderGreen.caller = nslider;
+
+      sliderRed.setValueSlider(nslider.redColor, pourcentConversion(nslider.redColor));
+      sliderBlue.setValueSlider(nslider.blueColor, pourcentConversion(nslider.blueColor));
+      sliderGreen.setValueSlider(nslider.greenColor, pourcentConversion(nslider.greenColor));
+
+      $("#colorSpace").show(1000);
+    });
+  }
+
   return nslider;
+}
+
+function getSliderAttribute(array, nameSlider ,attribute) {
+  let attributeGot;
+  let slider;
+
+  for(i=1; i < nbSlider+1 ; i++) {
+    if(array[i].nameSlider === nameSlider){
+      slider = array[i];
+      attributeGot = slider[attribute];
+    }
+  }
+
+  return attributeGot;
 }
 
 function buttonArrowRightTrigger() {
@@ -281,11 +395,12 @@ function permission (access) {
     var colorArray = rgbFromHEX(color);
 
     //Valeurs initiales
-    var initValues = [sliderRed.jqueryId.slider("value"), sliderGreen.jqueryId.slider("value"), sliderBlue.jqueryId.slider("value")];
+    var initValues = [sliderRed.jqueryId().slider("value"), sliderGreen.jqueryId().slider("value"), sliderBlue.jqueryId().slider("value")];
 
     if (colorArray[0] !== initValues[0]) {
       //Modification des valeurs
       sliderRed.setValueSlider(colorArray[0], pourcentConversion(colorArray[0]));
+      caller.redColor = colorArray[0];
       //Envoi des valeurs au serveur
       sendMessage("01."+sliderRed.idMessage+":" + initValues[0], "general");
     }
@@ -293,6 +408,7 @@ function permission (access) {
     if (colorArray[1] !== initValues[1]) {
       //Modification des valeurs
       sliderGreen.setValueSlider(colorArray[1], pourcentConversion(colorArray[1]));
+      caller.greenColor = colorArray[1];
       //Envoi des valeurs au serveur
       sendMessage("01."+sliderGreen.idMessage+":" + initValues[1], "general");
     }
@@ -301,6 +417,7 @@ function permission (access) {
     if (colorArray[2] !== initValues[2]) {
       //Modification des valeurs
       sliderBlue.setValueSlider(colorArray[2], pourcentConversion(colorArray[2]));
+      caller.blueColor = colorArray[2];
       //Envoi des valeurs au serveur
       sendMessage("01."+sliderBlue.idMessage+":" + initValues[2], "general");
     }
