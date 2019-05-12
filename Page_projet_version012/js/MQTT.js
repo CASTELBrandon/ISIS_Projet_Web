@@ -79,8 +79,7 @@ function onConnect() {
 	//Fonction de connexion
 	console.log("Connected");
 	client.subscribe("#");
-	sendMessage("01.Sys.R:0","general");
-	permission(true); //On affiche les fonctions si on est connecté
+	sendMessage("C1.Syst.R:0","general");
 	flag = false;
 }
 
@@ -102,22 +101,52 @@ function onConnectionLost(message) {
 
 function onMessageArrived(message) {
 	var mesReceiv = message.payloadString,
-			value = mesReceiv.substr(9),
-			id = mesReceiv.slice(0,8);
-	console.log(mesReceiv);
+			value = mesReceiv.substr(10),
+			id = mesReceiv.slice(0,9);
 
 	switch (id) {
-		case "00.Red.V":
-			sliderRed.setValueSlider(value, pourcentConversion(value));
+		case "C0.Init.P":
+			nbProj=value;
+			console.log("nbProj: "+nbProj);
 			break;
-		case "00.Gre.V":
-			sliderGreen.setValueSlider(value, pourcentConversion(value));
+		case "C0.Init.N":
+			nameSlider.push(value);
+			console.log("Nouveau slider: "+ nameSlider);
 			break;
-		case "00.Blu.V":
-			sliderBlue.setValueSlider(value , pourcentConversion(value));
+		case "C0.Init.C":
+			channelSlider.push(value);
+			console.log("Canaux des sliders: "+channelSlider);
 			break;
-		case "00.Mtr.V":
-			sliderMaster.setValueSlider(value , pourcentConversion(value));
+		case "C0.Init.E":
+			for(i=0; i < nbProj ; i++) {
+				console.log("i:" + i);
+				if (channelSlider[i] !== "0") {
+					sliderArray[i] = newSlider(nameSlider[i], nameSlider[i]+".V", 0, parentFader, firstChild, true);
+				} else {
+					sliderArray[i] = newSlider(nameSlider[i], nameSlider[i]+".V", 0, parentFader, firstChild, false);
+				}
+
+				if (i > 7) {
+					$("#"+sliderArray[i].nameSlider+"Zone").hide(1);
+				}
+			}
+
+			console.log(nameSlider);
+
+			var buttonArrowRight = document.createElement('button');
+			buttonArrowRight.id = "buttonArrowRight";
+			buttonArrowRight.innerHTML = ">";
+			parentFader.insertBefore(buttonArrowRight, firstChild);
+
+
+			var sliderMaster = newSlider("master", "Mast.V", 0, parentFader, firstChild, false);
+
+			//>>Evènement des flèches de défilement des sliderSheet
+			document.getElementById("buttonArrowRight").addEventListener("click", buttonArrowRightTrigger);
+			document.getElementById("buttonArrowRight").addEventListener("touch", buttonArrowRightTrigger);
+
+			//>>On affiche les fonctions si on est connecté
+			permission(true);
 			break;
 	}
 }
