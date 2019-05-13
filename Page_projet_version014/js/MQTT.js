@@ -128,14 +128,30 @@ function onMessageArrived(message) {
 				for(i=0; i < nbSlider ; i++) {
 					if (channelSlider[i] !== "0") {
 						sliderArray[i] = newSlider(nameSlider[i], nameSlider[i]+".V", 0, parentFader, firstChild, false);
+
+						//On stock les données actuelles
+						for (var j = 0; j < configArray.length; j++) {
+							configArray[j].namesliders.push(nameSlider[i]);
+							configArray[j].valuesliders.push(sliderArray[i].getValue());
+						}
+
 					} else {
 						sliderArray[i] = newSlider(nameSlider[i], nameSlider[i]+".V", 0, parentFader, firstChild, false);
+
+						//On stock les données actuelles
+						for (var j = 0; j < configArray.length; j++) {
+							configArray[j].namesliders.push(nameSlider[i]);
+							configArray[j].valuesliders.push(sliderArray[i].getValue());
+						}
 					}
 
 					if (i > 7) {
 						$("#"+sliderArray[i].nameSlider+"Zone").hide(1);
 					}
 				}
+
+				//On spécifie quelle config est initialisée
+				actualConfig = configArray[0];
 
 				var buttonArrowRight = document.createElement('button');
 				buttonArrowRight.id = "buttonArrowRight";

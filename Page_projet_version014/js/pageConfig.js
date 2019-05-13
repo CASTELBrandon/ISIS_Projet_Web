@@ -17,6 +17,18 @@ $(".ui-slider-handle").draggable();
 //On recupère l'Id du bouton de connexion
 var buttonConnect = document.getElementById("buttonConnect");
 
+//On crée des variables de configurations
+var configArray = new Array();
+for (var i = 0; i < 6; i++) {
+  configArray[i] = {
+    namesliders: [],
+    valuesliders: [],
+    nameConfig: i.toString()
+  }
+}
+
+var actualConfig;
+
 //On crée un variable pour appeller le slider appeleur du optionSpace
 var caller;
 
@@ -143,6 +155,63 @@ function colorPickerDisplay () {
       easing: 'easeInOutExpo'
     });*/
   }
+}
+
+/****************Fonctions des configs*******************/
+function configTrigger(newConfig, previousConfig) {
+  //On crée une variable temporaire
+  let _stockConfig = {
+    namesliders: [],
+    valuesliders: [],
+    nameConfig: previousConfig.nameConfig
+  }
+
+  //On scan les nouvelles variables
+  for (var i = 0; i < sliderArray.length; i++) {
+    _stockConfig.namesliders.push(sliderArray[i].getName());
+    _stockConfig.valuesliders.push(sliderArray[i].getValue());
+  }
+
+  console.log("_stockConfig:");
+  console.log(_stockConfig);
+
+  console.log("previousConfig:");
+  console.log(previousConfig);
+
+  //On stock les anciennes valeurs
+  switch (previousConfig.nameConfig) {
+    case "1":
+      sliderConfig[0] = _stockConfig;
+      break;
+    case "2":
+      sliderConfig[1] = _stockConfig;
+      break;
+    case "3":
+      sliderConfig[2] = _stockConfig;
+      break;
+    case "4":
+      sliderConfig[3] = _stockConfig;
+      break;
+    case "5":
+      sliderConfig[4] = _stockConfig;
+      break;
+    case "6":
+      sliderConfig[5] = _stockConfig;
+      break;
+  }
+
+  //On ajoute les nouvelles Valeurs
+  for (var i = 0; i < sliderArray.length; i++) {
+    document.getElementById(sliderArray[i].nameSlider+"Name").innerHTML = newConfig.namesliders[i];
+    sliderArray[i].nameSlider = newConfig.namesliders[i];
+    sliderArray[i].setValueSlider(newConfig.valuesliders[i], pourcentConversion(newConfig.valuesliders[i]));
+  }
+
+  console.log("newConfig:");
+  console.log(newConfig);
+
+  config = newConfig;
+  return config;
 }
 
 
@@ -430,3 +499,23 @@ function permission (access) {
   //>>Evènement des flèches de défilement des sliderSheet
   document.getElementById("buttonArrowLeft").addEventListener("click", buttonArrowLeftTrigger);
   document.getElementById("buttonArrowLeft").addEventListener("touch", buttonArrowLeftTrigger);
+
+  //>>Evènement des boutons de config
+  document.getElementById("buttonConfig1").addEventListener("click", function() {
+      configTrigger(configArray[0], actualConfig);
+  });
+  document.getElementById("buttonConfig2").addEventListener("click", function() {
+      configTrigger(configArray[1], actualConfig);
+  });
+  document.getElementById("buttonConfig3").addEventListener("click", function() {
+      configTrigger(configArray[2], actualConfig);
+  });
+  document.getElementById("buttonConfig4").addEventListener("click", function() {
+      configTrigger(configArray[3], actualConfig);
+  });
+  document.getElementById("buttonConfig5").addEventListener("click", function() {
+      configTrigger(configArray[4], actualConfig);
+  });
+  document.getElementById("buttonConfig6").addEventListener("click", function() {
+      configTrigger(configArray[4], actualConfig);
+  });

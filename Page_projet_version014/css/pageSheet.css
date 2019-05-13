@@ -47,6 +47,38 @@ p {
   float: left;
 }
 
+/*********************************/
+/*Propriété des boutons de config*/
+/*********************************/
+ul {
+  list-style-type: none;
+  margin-top: 5px;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+  border-radius: 12px;
+}
+
+li {
+  float: left;
+  display: block;
+  font-size: 15px;
+  color: white;
+  background-color: #1f3347
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+li:hover {
+  float: left;
+  display: block;
+  font-size: 15px;
+  color: white;
+  background-color: #00FFFF;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
 
 /*************************************/
 /*Propriété des éléments de connexion*/
@@ -98,6 +130,16 @@ p {
   box-shadow: 0px 0px 3px 1px #0ff;/*Effet néon*/
   margin: auto;
   display: flex;
+}
+
+#buttonArrowLeft{
+  background-color: #1f3347;
+  color: White;
+}
+
+#buttonArrowRight{
+  background-color: #1f3347;
+  color: White;
 }
 
 
