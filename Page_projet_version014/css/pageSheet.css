@@ -55,7 +55,7 @@ ul {
   margin-top: 5px;
   padding: 0;
   overflow: hidden;
-  background-color: #333;
+  background-color: #333333;
   border-radius: 12px;
 }
 
@@ -64,7 +64,7 @@ li {
   display: block;
   font-size: 15px;
   color: white;
-  background-color: #1f3347
+  background-color: #333333;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
@@ -76,6 +76,7 @@ li:hover {
   color: white;
   background-color: #00FFFF;
   text-align: center;
+  cursor: pointer;
   padding: 14px 16px;
   text-decoration: none;
 }
@@ -110,6 +111,7 @@ li:hover {
 }
 #buttonArrow:hover {
    box-shadow: 0px 0px 3px 1px #0ff;/*Effet néon*/
+   cursor: pointer;
 }
 
 #controlSpace {
@@ -133,13 +135,19 @@ li:hover {
 }
 
 #buttonArrowLeft{
-  background-color: #1f3347;
+  background-color: #333333
   color: White;
+}
+#buttonArrowLeft:hover{
+  cursor: pointer;
 }
 
 #buttonArrowRight{
-  background-color: #1f3347;
+  background-color: #333333
   color: White;
+}
+#buttonArrowRight:hover{
+  cursor: pointer;
 }
 
 

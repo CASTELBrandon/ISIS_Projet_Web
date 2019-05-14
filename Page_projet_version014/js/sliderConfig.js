@@ -18,6 +18,8 @@ class slider {
     this.nameValueSlider = nameSlider + "Value";
     this.nameId = this.nameSlider+"Name";
 
+    this.nameConfig = nameSlider;
+
     this.redColor = 0;
     this.blueColor = 0;
     this.greenColor = 0;
@@ -52,7 +54,7 @@ class slider {
       return newChromaButton;
     }
 
-    getValue() {
+    getValue(id) {
       return $("#"+this.nameSlider).slider("value");
     }
 
