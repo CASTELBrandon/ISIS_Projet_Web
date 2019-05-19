@@ -29,7 +29,8 @@ for (var i = 0; i < 6; i++) {
 
 var actualConfig,
     actualNameSlider,
-    actualValueSlider;
+    actualValueSlider,
+    numberCallConfig;
 
 //On crée un variable pour appeller le slider appeleur du optionSpace
 var caller;
@@ -263,7 +264,13 @@ function newSlider(name, id, value, parent, child, chroma) {
   if(nslider.nameSlider !== "red" && nslider.nameSlider !== "blue" && nslider.nameSlider !== "green") {
     nslider.jqueryId().on("slide", function(event, ui){
       document.getElementById(nslider.nameValueSlider).innerHTML = pourcentConversion(ui.value);
-      sendMessage("C1."+nslider.idMessage+":" + ui.value.toString(), "general");
+      if (ui.value < 10) {
+        sendMessage("C1."+nslider.idMessage+":" + "00" + ui.value.toString(), "general");
+      } else if (ui.value >= 10 && ui.value < 100) {
+        sendMessage("C1."+nslider.idMessage+":" + "0" + ui.value.toString(), "general");
+      } else if (ui.value >= 100) {
+        sendMessage("C1."+nslider.idMessage+":" + ui.value.toString(), "general");
+      }
     });
   }
 

@@ -107,7 +107,7 @@ function onMessageArrived(message) {
 	console.log(mesReceiv);
 	if (flagInit == false) {
 		switch (id) {
-			case "C0.Init.P":
+			case "C0.Init.U":
 				nbSlider=value;
 				console.log("nbSlider: "+nbSlider);
 				break;
@@ -119,30 +119,43 @@ function onMessageArrived(message) {
 				channelSlider.push(value);
 				console.log("Canaux des sliders: "+channelSlider);
 				break;
+			case "C0.Conf.C":
+				numberCallConfig = value;
+				console.log("numberCallConfig : ");
+				console.log(numberCallConfig);
+				break;
+
 		}
 	}
 
 	switch (id) {
 		case "C0.Init.E":
+			if (nbSlider === null || nbSlider === "0") {
+				nbSlider = nameSlider.length;
+				console.log("nbSlider : " + nbSlider);
+			}
+
 			if (flagInit == false) {
 				for(i=0; i < nbSlider ; i++) {
 					if (channelSlider[i] !== "0") {
-						sliderArray[i] = newSlider(nameSlider[i], nameSlider[i]+".V", 0, parentFader, firstChild, false);
-
-						//On stock les données actuelles
-						for (var j = 0; j < configArray.length; j++) {
-							configArray[j].namesliders.push(nameSlider[i]);
-							configArray[j].valuesliders.push(sliderArray[i].getValue());
+						if (i<10) {
+							sliderArray[i] = newSlider(nameSlider[i], "C00"+(i+1)+".V", 0, parentFader, firstChild, false);
+						} else if (i >= 10 && i < 100) {
+							sliderArray[i] = newSlider(nameSlider[i], "C0"+(i+1)+".V", 0, parentFader, firstChild, false);
+						} else if (i >= 100 && i < 513) {
+							sliderArray[i] = newSlider(nameSlider[i], "C"+(i+1)+".V", 0, parentFader, firstChild, false);
 						}
+
+						//On remplit la config appelée
+						configArray[numberCallConfig].namesliders.push(nameSlider[i]);
+						configArray[numberCallConfig].valuesliders.push(sliderArray[i].getValue());
 
 					} else {
 						sliderArray[i] = newSlider(nameSlider[i], nameSlider[i]+".V", 0, parentFader, firstChild, false);
 
-						//On stock les données actuelles
-						for (var j = 0; j < configArray.length; j++) {
-							configArray[j].namesliders.push(nameSlider[i]);
-							configArray[j].valuesliders.push(sliderArray[i].getValue());
-						}
+						//On remplit la config appelée
+						configArray[numberCallConfig].namesliders.push(nameSlider[i]);
+						configArray[numberCallConfig].valuesliders.push(sliderArray[i].getValue());
 					}
 
 					if (i > 7) {
@@ -151,7 +164,7 @@ function onMessageArrived(message) {
 				}
 
 				//On spécifie quelle config est initialisée
-				actualConfig = configArray[0];
+				actualConfig = configArray[numberCallConfig];
 
 				var buttonArrowRight = document.createElement('button');
 				buttonArrowRight.id = "buttonArrowRight";
@@ -179,7 +192,20 @@ function onMessageArrived(message) {
 	if (id.slice(0,4) === "C0.C") {
 		for (var i = 0; i < nbSlider; i++) {
 			if (id === "C0."+sliderArray[i].nameSlider+".V") {
-				sliderArray[i].setValueSlider(value, pourcentConversion(value));
+				console.log("Value received:");
+				console.log(value.substring(0,1));
+				console.log(value.substring(1));
+				console.log(value.substring(2));
+				if (value.substring(0,1) === "0" && value.substring(1,2) === "0") {
+					sliderArray[i].setValueSlider(value.substring(2), pourcentConversion(value.substring(2)));
+					console.log("Value reçu:" + value.substring(2));
+				} else if (value.substring(0,1) === "0") {
+					sliderArray[i].setValueSlider(value.substring(1), pourcentConversion(value.substring(1)));
+					console.log("Value reçu:" + value.substring(1));
+				} else {
+					sliderArray[i].setValueSlider(value, pourcentConversion(value));
+					console.log("Value reçu:" + value);
+				}
 			}
 		}
 	}
