@@ -105,11 +105,20 @@ function onMessageArrived(message) {
 			id = mesReceiv.slice(0,9);
 
 	console.log(mesReceiv);
-	if (flagInit == false) {
 		switch (id) {
 			case "C0.Init.U":
-				nbSlider=value;
-				console.log("nbSlider: "+nbSlider);
+				if (value.substring(0,1) === "0" && value.substring(1,2) === "0") {
+					nbSlider = value.substring(2);
+					console.log("Nb de slider : " + nbSlider);
+				} else if (value.substring(0,1) === "0") {
+					nbSlider = value.substring(1);
+					console.log("Nb de slider : " + nbSlider);
+				} else {
+					nbSlider = value;
+					console.log("Nb de slider : " + nbSlider);
+				}
+				//On nétoie les sliders
+				removeSlider();
 				break;
 			case "C0.Init.N":
 				nameSlider.push(value);
@@ -119,6 +128,18 @@ function onMessageArrived(message) {
 				channelSlider.push(value);
 				console.log("Canaux des sliders: "+channelSlider);
 				break;
+			case "C0.Init.V":
+				if (value.substring(0,1) === "0" && value.substring(1,2) === "0") {
+					valueSlider.push(value.substring(2));
+					console.log("valueSlider : " + valueSlider);
+				} else if (value.substring(0,1) === "0") {
+					valueSlider.push(value.substring(1));
+					console.log("valueSlider : " + valueSlider);
+				} else {
+					valueSlider.push(value);
+					console.log("valueSlider : " + valueSlider);
+				}
+				break;
 			case "C0.Conf.C":
 				numberCallConfig = value;
 				console.log("numberCallConfig : ");
@@ -126,7 +147,6 @@ function onMessageArrived(message) {
 				break;
 
 		}
-	}
 
 	switch (id) {
 		case "C0.Init.E":
@@ -135,15 +155,18 @@ function onMessageArrived(message) {
 				console.log("nbSlider : " + nbSlider);
 			}
 
-			if (flagInit == false) {
+			//if (flagInit == false) {
 				for(i=0; i < nbSlider ; i++) {
 					if (channelSlider[i] !== "0") {
 						if (i<10) {
-							sliderArray[i] = newSlider(nameSlider[i], "C00"+(i+1)+".V", 0, parentFader, firstChild, false);
+							sliderArray[i] = newSlider(nameSlider[i], "C00"+(i+1)+".V", valueSlider[i], parentFader, firstChild, false);
+							sliderArray[i].setValueSlider(valueSlider[i], pourcentConversion(valueSlider[i]));
 						} else if (i >= 10 && i < 100) {
-							sliderArray[i] = newSlider(nameSlider[i], "C0"+(i+1)+".V", 0, parentFader, firstChild, false);
+							sliderArray[i] = newSlider(nameSlider[i], "C0"+(i+1)+".V", valueSlider[i], parentFader, firstChild, false);
+							sliderArray[i].setValueSlider(valueSlider[i], pourcentConversion(valueSlider[i]));
 						} else if (i >= 100 && i < 513) {
-							sliderArray[i] = newSlider(nameSlider[i], "C"+(i+1)+".V", 0, parentFader, firstChild, false);
+							sliderArray[i] = newSlider(nameSlider[i], "C"+(i+1)+".V", valueSlider[i], parentFader, firstChild, false);
+							sliderArray[i].setValueSlider(valueSlider[i], pourcentConversion(valueSlider[i]));
 						}
 
 						//On remplit la config appelée
@@ -166,25 +189,22 @@ function onMessageArrived(message) {
 				//On spécifie quelle config est initialisée
 				actualConfig = configArray[numberCallConfig];
 
-				var buttonArrowRight = document.createElement('button');
-				buttonArrowRight.id = "buttonArrowRight";
-				buttonArrowRight.innerHTML = ">";
-				parentFader.insertBefore(buttonArrowRight, firstChild);
+				if (flagInit==false) {
 
-
-				var sliderMaster = newSlider("master", "Mast.V", 0, parentFader, firstChild, false);
-
-				//>>Evènement des flèches de défilement des sliderSheet
-				document.getElementById("buttonArrowRight").addEventListener("click", buttonArrowRightTrigger);
-				document.getElementById("buttonArrowRight").addEventListener("touch", buttonArrowRightTrigger);
-
-				//On dit qu'on a déjà initialisé une première fois
-				flagInit=true;
-			}
+					//On dit qu'on a déjà initialisé une première fois
+					flagInit=true;
+				}
+			//}
 
 
 			//>>On affiche les fonctions si on est connecté
 			permission(true);
+
+			//>>On a terminé donc on réinitialise tous les tableaux
+			nameSlider = [];
+			channelSlider = [];
+			valueSlider = [];
+
 			break;
 	}
 
@@ -192,10 +212,6 @@ function onMessageArrived(message) {
 	if (id.slice(0,4) === "C0.C") {
 		for (var i = 0; i < nbSlider; i++) {
 			if (id === "C0."+sliderArray[i].nameSlider+".V") {
-				console.log("Value received:");
-				console.log(value.substring(0,1));
-				console.log(value.substring(1));
-				console.log(value.substring(2));
 				if (value.substring(0,1) === "0" && value.substring(1,2) === "0") {
 					sliderArray[i].setValueSlider(value.substring(2), pourcentConversion(value.substring(2)));
 					console.log("Value reçu:" + value.substring(2));

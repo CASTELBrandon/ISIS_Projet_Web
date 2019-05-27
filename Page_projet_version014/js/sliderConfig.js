@@ -16,7 +16,7 @@ class slider {
     this.previousDiv = previousDiv;
     this.chromaAccess = chromaAccess;
     this.nameValueSlider = nameSlider + "Value";
-    this.nameId = this.nameSlider+"Name";
+    this.nameId = this.idMessage+"Name";
 
     this.nameConfig = nameSlider;
 
@@ -59,17 +59,18 @@ class slider {
     }
 
     getName() {
-      return document.getElementById(this.nameSlider+"Name").innerHTML;
+      return document.getElementById(this.idMessage+"Name").innerHTML;
     }
 
     changeName(id) {
       let newName;
       console.log(id.target.id);
       newName = prompt("New name ?");
-      if (newName === "" || newName === " " || newName === null){
-        alert("Veuillez donner un nom complet.");
+      if (newName === "" || newName === " " || newName === null || newName.length != 4){
+        alert("Veuillez donner un nom de 4 caractères.");
       } else {
         document.getElementById(id.target.id).innerHTML = newName;
+        sendMessage("C1."+id.target.id.slice(0,4)+".N:"+newName,"general");
       }
     }
 
@@ -85,7 +86,7 @@ class slider {
       //On crée le nom du nouveau slider
       var newP = document.createElement('p');
       newP.className = "colorText";
-      newP.id = this.nameSlider+"Name";
+      newP.id = this.idMessage+"Name";
       newP.appendChild(document.createTextNode(this.nameSlider));
       newSliderZone.appendChild(newP);//On l'ajoute dans le div global
 

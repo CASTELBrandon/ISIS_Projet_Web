@@ -40,7 +40,7 @@ var flag_buttonArrow=false;
 
 //On crée de nouveau slider
 var parentFader = document.getElementById("faderSpace");
-var firstChild = parentFader.firstChild;
+
 
 var parentColor = document.getElementById("optionSpace");
 var secondChild = parentColor.firstChild;
@@ -51,6 +51,17 @@ buttonArrowLeft.id = "buttonArrowLeft";
 buttonArrowLeft.innerHTML = "<";
 parentFader.insertBefore(buttonArrowLeft, firstChild);
 
+var buttonArrowRight = document.createElement('button');
+buttonArrowRight.id = "buttonArrowRight";
+buttonArrowRight.innerHTML = ">";
+parentFader.insertBefore(buttonArrowRight, firstChild);
+
+
+var sliderMaster = newSlider("master", "Mast.V", 0, parentFader, firstChild, false);
+
+//On identifie la flèche de droite
+var firstChild = document.getElementById("buttonArrowRight");
+
 /*
   On crée nos nouveaux slider dans un tableau de slider, ils sont automatiquement crée
   dans le fichier MQTT.js, à la réception des messages systèmes.
@@ -60,6 +71,7 @@ var nbSlider;
 var nameSlider = new Array();
 var channelSlider = new Array();
 var sliderArray = new Array();
+var valueSlider = new Array();
 
 /******************************************
              Initialisation
@@ -187,42 +199,36 @@ function configTrigger(newConfig, previousConfig) {
   switch (previousConfig.nameConfig) {
     case "0":
       configArray[0] = _stockConfig;
-      console.log("configArray[0]");
-      console.log(configArray[0]);
       break;
     case "1":
       configArray[1] = _stockConfig;
-      console.log("configArray[1]");
-      console.log(configArray[1]);
       break;
     case "2":
       configArray[2] = _stockConfig;
-      console.log("configArray[2]");
-      console.log(configArray[2]);
       break;
     case "3":
       configArray[3] = _stockConfig;
-      console.log("configArray[3]");
-      console.log(configArray[3]);
       break;
     case "4":
       configArray[4] = _stockConfig;
-      console.log("configArray[4]");
-      console.log(configArray[4]);
       break;
     case "5":
       configArray[5] = _stockConfig;
-      console.log("configArray[5]");
-      console.log(configArray[5]);
       break;
   }
 
+  //On envoi à la raspberry le numéro de la config appelée
+  sendMessage("C1.Conf.C:"+newConfig.nameConfig, "general");
+
   //On ajoute les nouvelles Valeurs
+  /*
   for (var i = 0; i < sliderArray.length; i++) {
     document.getElementById(sliderArray[i].nameSlider+"Name").innerHTML = newConfig.namesliders[i];
     sliderArray[i].nameConfig = newConfig.namesliders[i];
     sliderArray[i].setValueSlider(newConfig.valuesliders[i], pourcentConversion(newConfig.valuesliders[i]));
-  }
+  }*/
+
+
 
   console.log("newConfig:");
   console.log(newConfig);
@@ -295,8 +301,10 @@ function newSlider(name, id, value, parent, child, chroma) {
   });
 
   //Changement de nom au click
-  document.getElementById(nslider.nameId).addEventListener("click", nslider.changeName.bind(nslider.nameId));//bind donne toutes les infos, ils faut les sélectionnés avec target
-
+  if (nslider.nameSlider !== "master") {
+    document.getElementById(nslider.nameId).addEventListener("click", nslider.changeName.bind(nslider.nameId));//bind donne toutes les infos, ils faut les sélectionnés avec target
+  }
+  
   //Evènement de slide des fader RGB
   if(nslider.nameSlider === "red" || nslider.nameSlider === "blue" || nslider.nameSlider === "green") {
     //On intègre une variable d'appeleur du slider
@@ -344,6 +352,14 @@ function newSlider(name, id, value, parent, child, chroma) {
   }
 
   return nslider;
+}
+
+function removeSlider() {
+  for (var i = 0; i < sliderArray.length; i++) {
+    $("#"+sliderArray[i].nameSlider+"Zone").remove();
+  }
+  sliderArray = [];
+  console.log("Slider effacer");
 }
 
 function getSliderAttribute(array, nameSlider ,attribute) {
@@ -522,6 +538,8 @@ function permission (access) {
   //>>Evènement des flèches de défilement des sliderSheet
   document.getElementById("buttonArrowLeft").addEventListener("click", buttonArrowLeftTrigger);
   document.getElementById("buttonArrowLeft").addEventListener("touch", buttonArrowLeftTrigger);
+  document.getElementById("buttonArrowRight").addEventListener("click", buttonArrowRightTrigger);
+  document.getElementById("buttonArrowRight").addEventListener("touch", buttonArrowRightTrigger);
 
   //>>Evènement des boutons de config
   document.getElementById("buttonConfig1").addEventListener("click", function() {
