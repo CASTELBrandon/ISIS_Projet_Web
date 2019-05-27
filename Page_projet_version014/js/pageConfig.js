@@ -217,6 +217,9 @@ function configTrigger(newConfig, previousConfig) {
       break;
   }
 
+  //On gère le design des boutons pour avoir le contour
+
+
   //On envoi à la raspberry le numéro de la config appelée
   sendMessage("C1.Conf.C:"+newConfig.nameConfig, "general");
 
@@ -304,7 +307,7 @@ function newSlider(name, id, value, parent, child, chroma) {
   if (nslider.nameSlider !== "master") {
     document.getElementById(nslider.nameId).addEventListener("click", nslider.changeName.bind(nslider.nameId));//bind donne toutes les infos, ils faut les sélectionnés avec target
   }
-  
+
   //Evènement de slide des fader RGB
   if(nslider.nameSlider === "red" || nslider.nameSlider === "blue" || nslider.nameSlider === "green") {
     //On intègre une variable d'appeleur du slider
@@ -544,19 +547,64 @@ function permission (access) {
   //>>Evènement des boutons de config
   document.getElementById("buttonConfig1").addEventListener("click", function() {
     actualConfig = configTrigger(configArray[0], actualConfig);
+    //On modifie la couleur de la config pour spécifier la config actuelle
+    document.getElementById("buttonConfig1").style.color= "#00FFFF";
+    document.getElementById("buttonConfig2").style.color= "White";
+    document.getElementById("buttonConfig3").style.color= "White";
+    document.getElementById("buttonConfig4").style.color= "White";
+    document.getElementById("buttonConfig5").style.color= "White";
+    document.getElementById("buttonConfig6").style.color= "White";
   });
   document.getElementById("buttonConfig2").addEventListener("click", function() {
     actualConfig = configTrigger(configArray[1], actualConfig);
+    //On modifie la couleur de la config pour spécifier la config actuelle
+    document.getElementById("buttonConfig1").style.color= "White";
+    document.getElementById("buttonConfig2").style.color= "#00FFFF";
+    document.getElementById("buttonConfig3").style.color= "White";
+    document.getElementById("buttonConfig4").style.color= "White";
+    document.getElementById("buttonConfig5").style.color= "White";
+    document.getElementById("buttonConfig6").style.color= "White";
   });
   document.getElementById("buttonConfig3").addEventListener("click", function() {
     actualConfig = configTrigger(configArray[2], actualConfig);
+    //On modifie la couleur de la config pour spécifier la config actuelle
+    document.getElementById("buttonConfig1").style.color= "White";
+    document.getElementById("buttonConfig2").style.color= "White";
+    document.getElementById("buttonConfig3").style.color= "#00FFFF";
+    document.getElementById("buttonConfig4").style.color= "White";
+    document.getElementById("buttonConfig5").style.color= "White";
+    document.getElementById("buttonConfig6").style.color= "White";
   });
   document.getElementById("buttonConfig4").addEventListener("click", function() {
     actualConfig = configTrigger(configArray[3], actualConfig);
+    //On modifie la couleur de la config pour spécifier la config actuelle
+    document.getElementById("buttonConfig1").style.color= "White";
+    document.getElementById("buttonConfig2").style.color= "White";
+    document.getElementById("buttonConfig3").style.color= "White";
+    document.getElementById("buttonConfig4").style.color= "#00FFFF";
+    document.getElementById("buttonConfig5").style.color= "White";
+    document.getElementById("buttonConfig6").style.color= "White";
   });
   document.getElementById("buttonConfig5").addEventListener("click", function() {
     actualConfig = configTrigger(configArray[4], actualConfig);
+    //On modifie la couleur de la config pour spécifier la config actuelle
+    document.getElementById("buttonConfig1").style.color= "White";
+    document.getElementById("buttonConfig2").style.color= "White";
+    document.getElementById("buttonConfig3").style.color= "White";
+    document.getElementById("buttonConfig4").style.color= "White";
+    document.getElementById("buttonConfig5").style.color= "#00FFFF";
+    document.getElementById("buttonConfig6").style.color= "White";
   });
   document.getElementById("buttonConfig6").addEventListener("click", function() {
     actualConfig = configTrigger(configArray[4], actualConfig);
+    //On modifie la couleur de la config pour spécifier la config actuelle
+    document.getElementById("buttonConfig1").style.color= "White";
+    document.getElementById("buttonConfig2").style.color= "White";
+    document.getElementById("buttonConfig3").style.color= "White";
+    document.getElementById("buttonConfig4").style.color= "White";
+    document.getElementById("buttonConfig5").style.color= "White";
+    document.getElementById("buttonConfig6").style.color= "#00FFFF";
+  });
+  document.getElementById("buttonConfig6").addEventListener("click", function() {
+    
   });
