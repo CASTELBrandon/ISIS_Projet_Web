@@ -140,10 +140,66 @@ function onMessageArrived(message) {
 					console.log("valueSlider : " + valueSlider);
 				}
 				break;
+			case "C0.Mast.V":
+				if (value.substring(0,1) === "0" && value.substring(1,2) === "0") {
+					sliderMaster.setValueSlider(value.substring(2), pourcentConversion(value.substring(2)));
+					console.log("valueSlider : " + valueSlider);
+				} else if (value.substring(0,1) === "0") {
+					sliderMaster.setValueSlider(value.substring(1), pourcentConversion(value.substring(1)));
+					console.log("valueSlider : " + valueSlider);
+				} else {
+					sliderMaster.setValueSlider(value, pourcentConversion(value));
+					console.log("valueSlider : " + valueSlider);
+				}
 			case "C0.Conf.C":
 				numberCallConfig = value;
 				console.log("numberCallConfig : ");
 				console.log(numberCallConfig);
+
+				//On modifie la couleur de la config pour spécifier la config actuelle
+				if (numberCallConfig === "1") {
+			    document.getElementById("buttonConfig1").style.color= "#00FFFF";
+			    document.getElementById("buttonConfig2").style.color= "White";
+			    document.getElementById("buttonConfig3").style.color= "White";
+			    document.getElementById("buttonConfig4").style.color= "White";
+			    document.getElementById("buttonConfig5").style.color= "White";
+			    document.getElementById("buttonConfig6").style.color= "White";
+				} else if (numberCallConfig === "2") {
+					document.getElementById("buttonConfig1").style.color= "White";
+					document.getElementById("buttonConfig2").style.color= "#00FFFF";
+					document.getElementById("buttonConfig3").style.color= "White";
+					document.getElementById("buttonConfig4").style.color= "White";
+					document.getElementById("buttonConfig5").style.color= "White";
+					document.getElementById("buttonConfig6").style.color= "White";
+				} else if (numberCallConfig === "3") {
+					document.getElementById("buttonConfig1").style.color= "White";
+			    document.getElementById("buttonConfig2").style.color= "White";
+			    document.getElementById("buttonConfig3").style.color= "#00FFFF";
+			    document.getElementById("buttonConfig4").style.color= "White";
+			    document.getElementById("buttonConfig5").style.color= "White";
+			    document.getElementById("buttonConfig6").style.color= "White";
+				} else if (numberCallConfig === "4") {
+					document.getElementById("buttonConfig1").style.color= "White";
+			    document.getElementById("buttonConfig2").style.color= "White";
+			    document.getElementById("buttonConfig3").style.color= "White";
+			    document.getElementById("buttonConfig4").style.color= "#00FFFF";
+			    document.getElementById("buttonConfig5").style.color= "White";
+			    document.getElementById("buttonConfig6").style.color= "White";
+				} else if (numberCallConfig === "5") {
+					document.getElementById("buttonConfig1").style.color= "White";
+			    document.getElementById("buttonConfig2").style.color= "White";
+			    document.getElementById("buttonConfig3").style.color= "White";
+			    document.getElementById("buttonConfig4").style.color= "White";
+			    document.getElementById("buttonConfig5").style.color= "#00FFFF";
+			    document.getElementById("buttonConfig6").style.color= "White";
+				} else if (numberCallConfig === "6") {
+					document.getElementById("buttonConfig1").style.color= "White";
+			    document.getElementById("buttonConfig2").style.color= "White";
+			    document.getElementById("buttonConfig3").style.color= "White";
+			    document.getElementById("buttonConfig4").style.color= "White";
+			    document.getElementById("buttonConfig5").style.color= "White";
+			    document.getElementById("buttonConfig6").style.color= "#00FFFF";
+				}
 				break;
 
 		}
